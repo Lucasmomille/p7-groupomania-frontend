@@ -5,7 +5,7 @@ import * as ROUTES from './constants/routes';
 
 
 const Login = lazy(() => import('./pages/login'));
-const SignUp = lazy(() => import('./pages/signUp'));
+const SignUp = lazy(() => import('./pages/signup'));
 const Dashboard = lazy(() => import('./pages/dashboard'));
 const Lost = lazy(() => import('./pages/lost'));
 

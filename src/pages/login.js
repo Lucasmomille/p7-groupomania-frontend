@@ -3,9 +3,10 @@ import { useState, useContext, useEffect } from 'react';
 
 import { useForm } from "react-hook-form";
 import { Link, useHistory } from "react-router-dom";
-//import SignService from "../services/SignService";
+import SignService from "../services/SignService";
 import * as ROUTES from '../constants/routes';
 //import UserContext from '../context/user';
+import * as SVG from '../constants/svg';
 
 const wait = function (duration = 1000) {
     return new Promise((resolve) => {
@@ -26,23 +27,21 @@ export default function Login() {
             password: data["password"],
         };
         await wait(2000)
-        //saveLogin(info);
+        saveLogin(info);
 
         // history.push(ROUTES.DASHBOARD);
 
     }
 
-    /* const saveLogin = (info) => {
+    const saveLogin = (info) => {
         console.log("saveLogin")
 
         SignService.signin(info)
             .then(response => {
-                setUserInfo({
-                    client: response.headers.client,
-                    uid: response.headers.uid,
-                    accessToken: response.headers["access-token"]
-                })
-                console.log(userInfo.client)
+                /* setUserInfo({
+                    accessToken: response.data.accessToken)
+                }) */
+                console.log(response.data.accessToken)
                 setIsError(false);
 
             })
@@ -55,7 +54,7 @@ export default function Login() {
                     setIsError(false);
                 }
             });
-    }; */
+    };
 
 
 
@@ -65,6 +64,7 @@ export default function Login() {
 
     return (
         <div className="container flex mx-auto w-11/12 lg:w-9/12 justify-between items-center min-h-screen">
+            {SVG.LOGOCOLOR}
             <form onSubmit={handleSubmit(onSubmit)} method="submit" className="w-10/12 lg:w-5/12 mx-auto flex flex-col space-y-4 items-center bg-green-50 p-4 border border-blue-600 mb-4 rounded">
                 <h2 className="uppercase text-blue-600 my-5">Sign in to website</h2>
                 <div className="flex flex-col text-left">
@@ -102,13 +102,11 @@ export default function Login() {
                     {isError && <span className="text-red-500 text-xs mt-1 mb-2">Mot de passe invalide</span>}
 
                 </div>
-                <div className="flex flex-col lg:flex-row justify-between items-center w-10/12 mb-5">
-                    <Link to={ROUTES.FORGOT} className="text-blue-600 lg:mb-0 mb-4 rounded font-bold inline-block lg:w-5/12 px-4 py-2 text-center hover:bg-blue-600 hover:text-white">
-                        Mot de passe oublié&nbsp;?
-                    </Link>
+                <div className="flex text-center items-center w-10/12 mb-5">
+
                     <button
                         type="submit"
-                        className="bg-blue-600 text-white hover:bg-transparent hover:text-blue-600 rounded font-bold px-8 py-2 lg:w-5/12">
+                        className="bg-blue-600 mx-auto text-white hover:bg-transparent hover:text-blue-600 rounded font-bold px-8 py-2">
                         Envoyer
                     </button>
                 </div>

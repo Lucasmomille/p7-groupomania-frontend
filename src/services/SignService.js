@@ -1,12 +1,5 @@
 import http from "../http-common";
 /* eslint-disable */
-/* const getAll = () => {
-    return http.get("/users");
-};
-
-const get = id => {
-    return http.get(`/users/${id}`);
-}; */
 
 //create user
 const create = data => {
@@ -29,22 +22,11 @@ const signout = data => {
     return http.post("/auth/sign_out", data);
 }
 
-// delete user
-const remove = data => {
-    return http.delete("/auth", data);
-};
-
-/* const removeAll = () => {
-    return http.delete(`/users`);
-}; */
-
 
 
 /* eslint-disable */
 export default {
     create,
-    // update,
-    remove,
     signin,
     signout,
 };

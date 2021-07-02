@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { lazy, Suspense, useState } from 'react';
+import React, { lazy, Suspense, useState } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import * as ROUTES from './constants/routes';
 
@@ -16,10 +16,10 @@ function App() {
       <Router >
         <Suspense fallback={<p>Loading...</p>}>
           <Switch>
-            <Route path={ROUTES.LOST} component={Lost} />
             <Route path={ROUTES.LOGIN} component={Login} />
             <Route path={ROUTES.SIGNUP} component={SignUp} />
             <Route path={ROUTES.DASHBOARD} exact component={Dashboard} />
+            <Route path={ROUTES.LOST} component={Lost} />
           </Switch>
         </Suspense>
       </Router>

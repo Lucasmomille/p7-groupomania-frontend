@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { useState, useContext, useEffect } from 'react';
-
+import UserContext from '../context/userContext';
 import { useForm } from "react-hook-form";
 import { Link, useHistory } from "react-router-dom";
 import SignService from "../services/SignService";
@@ -19,6 +19,7 @@ export default function Login() {
     const history = useHistory();
     const { register, handleSubmit, formState: { errors } } = useForm();
     let [isError, setIsError] = useState(false);
+    const { userToken, setUserToken } = useContext(UserContext);
 
     const onSubmit = async data => {
         console.log("submit")
@@ -29,7 +30,7 @@ export default function Login() {
         await wait(2000)
         saveLogin(info);
 
-        // history.push(ROUTES.DASHBOARD);
+        history.push(ROUTES.DASHBOARD);
 
     }
 
@@ -42,11 +43,14 @@ export default function Login() {
                     accessToken: response.data.accessToken)
                 }) */
                 console.log(response.data.accessToken)
+                setUserToken(response.data.accessToken)
                 setIsError(false);
 
             })
             .catch(e => {
-                if (e.response.status = 401) {
+                if (e) {
+                    console.log(e)
+                } else if (e.response.status = 401) {
                     setIsError(true);
                     console.log("is 401 " + isError);
                     return isError;

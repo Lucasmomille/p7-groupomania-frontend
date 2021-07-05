@@ -20,7 +20,7 @@ const getAll = () => {
         baseURL: "http://localhost:3000/api",
         headers: {
             "Content-type": "multipart/form-data",
-            'x-access-token': `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjI1MjI5MDI0LCJleHAiOjE2MjUzMTU0MjR9.4pHLTHeLOjgfAUjBeZcE7c7zHL4uBxiUPo2_wjuVQ0A`
+            'x-access-token': `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjI1NDg3ODQ4LCJleHAiOjE2MjU1NzQyNDh9._iF9KQDSJnAPVHyKLo2fMoaWiXdtRtA8WaX23i-Hf1Y`
         }
 
     }

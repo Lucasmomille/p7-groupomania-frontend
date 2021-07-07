@@ -22,7 +22,6 @@ export default function Login() {
     const { userToken, setUserToken } = useContext(UserContext);
 
     const onSubmit = async data => {
-        console.log("submit")
         var info = {
             email: data["email"],
             password: data["password"],
@@ -42,7 +41,7 @@ export default function Login() {
                 /* setUserInfo({
                     accessToken: response.data.accessToken)
                 }) */
-                console.log(response.data.accessToken)
+                //console.log(response.data.accessToken)
                 setUserToken(response.data.accessToken)
                 setIsError(false);
 

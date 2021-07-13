@@ -2,12 +2,13 @@
 import React, { useState, useContext, useEffect } from "react";
 import PostService from "../services/PostService";
 import UserContext from '../context/userContext';
-
+import Post from "../components/Post";
 
 export default function Dashboard() {
-    const [posts, setPost] = useState([]);
-    const [comments, setComments] = useState([]);
-    const [file, setFile] = useState({ file: null })
+    /* const [posts, setPost] = useState([]);
+    const [comments, setComments] = useState([]); */
+    const [file, setFile] = useState({ file: "" })
+    const [title, setTitle] = useState({ title: "" })
     const { userToken, setUserToken } = useContext(UserContext);
 
     const handleFile = (e) => {
@@ -18,68 +19,64 @@ export default function Dashboard() {
 
     const uploadFile = async () => {
 
+        console.log(file.file.name);
+        console.log(title);
+
+
+    }
+
+
+    const onSubmit = async e => {
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append('file', file);
+        // formData.append('image', file.file.name);
+        formData.append('title', title);
+
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ', ' + pair[1]);
+        }
         console.log(file)
-    }
+        let data = {
+            "title": title,
+            "image": formData
+        }
+        await PostService.create(userToken, formData)
+            .then(
+                console.log('File Uploaded')
+            )
+            .catch(err => {
+                console.log(err);
+            }
+            );
 
-    const createPost = () => {
 
-    }
-
-    const getPost = () => {
-        console.log("user token " + userToken);
-        let token = userToken;
-        PostService.getAll(token)
-            .then(response => {
-                setPost(response.data)
-                setComments(response.data.comments)
-            })
-            .catch(e => {
-                console.log(e)
-            })
-    }
-    /* useEffect(() => {
+    };
+    useEffect(() => {
         document.title = 'Groupomania';
 
-    }, []); */
+    }, []);
 
     return (
         <main className="flex w-full">
             <div className="bg-gray-50 mx-auto px-12 lg:text-left text-center w-7/12 mt-16 pt-10 flex flex-col">
-                <form className="flex flex-col space-y-6 bg-blue-100 w-9/12">
+                <form className="flex flex-col mx-auto space-y-6 bg-blue-100 w-9/12 mb-12" onSubmit={onSubmit}>
                     <label>Titre du post</label>
-                    <input type="text" id="titlePost" />
+                    <input type="text" id="titlePost" onChange={(e) => setTitle(e.target.value)} className="p-2 mx-auto w-11/12" />
                     <label>Image</label>
 
                     <input type="file" capture="user" accept="image/^" id="titlePost" onChange={(e) => handleFile(e)} />
-
+                    <input
+                        type='submit'
+                        value='Upload'
+                        className='bg-gray-300 mt-4'
+                    />
                 </form>
-                <button onClick={() => uploadFile()}>Upload</button>
-                <div className="flex flex-col">
-                    <button onClick={getPost}>Test</button>
-                </div>
-                {posts.map((post) => (
-                    <div key={post.id} className="flex flex-col items-center text-left ">
-                        <img src={post.imageUrl} alt="" className="w-9/12 rounded-md" />
-                        <p className="p-4 pt-2 pb-1 w-full">
-                            <span className="w-9/12">{post.userId}</span>
-                            <span className=" w-9/12 italic text-xl">{post.title}</span>
-                        </p>
-                        <span className="w-9/12">{post.likes}</span>
-                        {console.log(post.comments)}
-                        {post.comments.map((comment) => (
-                            <div key={comment.id} className="p-4 pt-1 pb-4 w-9/12 text-left">
-                                <p className="mb-1" >
-                                    <a className="mr-6 font-bold">{comment.userId}</a>
-                                    <span>{comment.message}</span>
-                                </p>
-                            </div>
-                        ))}
-                    </div>
+                {/* <button onClick={() => uploadFile()}>Charge</button> */}
 
-                ))
-                }
+                <Post />
 
-            </div >
-        </main >
+            </div>
+        </main>
     )
 }

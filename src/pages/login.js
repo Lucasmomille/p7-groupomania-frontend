@@ -41,7 +41,7 @@ export default function Login() {
                 /* setUserInfo({
                     accessToken: response.data.accessToken)
                 }) */
-                //console.log(response.data.accessToken)
+                console.log(response.data.accessToken)
                 setUserToken(response.data.accessToken)
                 setIsError(false);
 

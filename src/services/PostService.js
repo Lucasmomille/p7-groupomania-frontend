@@ -15,8 +15,22 @@ const getAll = (token) => {
     // return http.get("/posts/all")
 };
 
+const create = (token, data) => {
+    return axios.create({
+        baseURL: "http://localhost:3000/api",
+        headers: {
+            "Content-type": "multipart/form-data",
+            'x-access-token': `${token}`
+        },
+
+
+    }
+    ).post("/posts", data);
+    // return http.get("/posts/all")
+};
+
 export default {
-    //create,
+    create,
     getAll
 
 };

@@ -1,28 +1,31 @@
 /* eslint-disable */
 import React, { useState, useContext, useEffect } from "react";
+import Sidebar from '../components/Sidebar';
 import PostService from "../services/PostService";
 import UserContext from '../context/userContext';
 import Post from "../components/Post";
+
 
 export default function Dashboard() {
     /* const [posts, setPost] = useState([]);
     const [comments, setComments] = useState([]); */
     const [file, setFile] = useState({ file: "" })
     const [title, setTitle] = useState({ title: "" })
+    const [fileName, setFileName] = useState()
     const { userToken, setUserToken } = useContext(UserContext);
 
     const handleFile = (e) => {
         console.log(e)
-        let file = e.target.files[0];
+        const file = e.target.files[0];
+
+        setFileName(file.name);
+        console.log(fileName);
         setFile({ file: file })
     }
 
     const uploadFile = async () => {
-
         console.log(file.file.name);
         console.log(title);
-
-
     }
 
 
@@ -59,18 +62,28 @@ export default function Dashboard() {
 
     return (
         <main className="flex w-full">
-            <div className="bg-gray-50 mx-auto px-12 lg:text-left text-center w-7/12 mt-16 pt-10 flex flex-col">
-                <form className="flex flex-col mx-auto space-y-6 bg-blue-100 w-9/12 mb-12" onSubmit={onSubmit}>
-                    <label>Titre du post</label>
-                    <input type="text" id="titlePost" onChange={(e) => setTitle(e.target.value)} className="p-2 mx-auto w-11/12" />
-                    <label>Image</label>
+            <Sidebar></Sidebar>
+            <div className="bg-gray-50 mx-auto px-12 lg:text-left text-center w-7/12 mt-16 pt-10 flex flex-col rounded-md">
 
-                    <input type="file" capture="user" accept="image/^" id="titlePost" onChange={(e) => handleFile(e)} />
-                    <input
+                <form className="flex flex-col mx-auto space-y-6 bg-red-100 w-9/12 mb-12 p-4 rounded-md" onSubmit={onSubmit}>
+                    <label>Titre du post</label>
+                    <input type="text" id="titlePost" onChange={(e) => setTitle(e.target.value)}
+                        className="p-2 mx-auto w-11/12 rounded-md" />
+
+                    <div className="file-input w-full flex flex-col items-center">
+                        <label htmlFor="file">Image...</label>
+
+                        <input type="file" capture="user" accept="image/^"
+                            className="file"
+                            id="file" onChange={(e) => handleFile(e)} />
+                        <p>{fileName}</p>
+                    </div>
+
+                    <button
                         type='submit'
-                        value='Upload'
-                        className='bg-gray-300 mt-4'
-                    />
+
+                        className='bg-red-300 mt-4 text-white font-bold'
+                    > Poster !</button>
                 </form>
                 {/* <button onClick={() => uploadFile()}>Charge</button> */}
 

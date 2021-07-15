@@ -38,13 +38,12 @@ export default function Login() {
 
         SignService.signin(info)
             .then(response => {
-                /* setUserInfo({
-                    accessToken: response.data.accessToken)
-                }) */
-                console.log(response.data.accessToken)
-                setUserToken(response.data.accessToken)
-                setIsError(false);
 
+                //setUserToken(response.data.accessToken)
+                sessionStorage.setItem("infoUser", JSON.stringify(response.data.accessToken));
+                setIsError(false);
+                //sessionStorage.clear();
+                //localStorage.clear();
             })
             .catch(e => {
                 if (e) {

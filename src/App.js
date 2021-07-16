@@ -15,10 +15,12 @@ function App() {
   const [userToken, setUserToken] = useState();
 
   React.useEffect(() => {
-    const info = JSON.parse(sessionStorage.getItem("infoUser")) || "";
+    const info = JSON.parse(sessionStorage.getItem("infoUser")) || null;
     //console.log(info)
     setUserToken(info)
   }, [])
+
+  // sortir info au dessus, mettre info en dépendance ne regle pas pb
 
   /* React.useEffect(() => {
     sessionStorage.setItem("infoUser", JSON.stringify(userToken));

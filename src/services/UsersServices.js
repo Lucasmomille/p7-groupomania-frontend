@@ -11,7 +11,6 @@ const isUser = (token) => {
 
     }
     ).get("/users/user");
-    // return http.get("/posts/all")
 };
 
 const isAdmin = (token) => {
@@ -27,7 +26,32 @@ const isAdmin = (token) => {
     // return http.get("/posts/all")
 };
 
+const updateUser = (token, data) => {
+    return axios.create({
+        baseURL: "http://localhost:3000/api",
+        headers: {
+            "Content-type": "multipart/form-data",
+            'x-access-token': `${token}`
+        }
+
+    }
+    ).put("/users", data);
+};
+
+const getUser = (token) => {
+    return axios.create({
+        baseURL: "http://localhost:3000/api",
+        headers: {
+            "Content-type": "multipart/form-data",
+            'x-access-token': `${token}`
+        }
+    }
+    ).get("/users");
+};
+
 export default {
     isUser,
-    isAdmin
+    isAdmin,
+    updateUser,
+    getUser
 };

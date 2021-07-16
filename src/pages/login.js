@@ -26,21 +26,24 @@ export default function Login() {
             email: data["email"],
             password: data["password"],
         };
-        await wait(2000)
-        saveLogin(info);
 
+        saveLogin(info);
+        await wait(2000)
         history.push(ROUTES.DASHBOARD);
 
     }
 
-    const saveLogin = (info) => {
+    const saveLogin = async (info) => {
         console.log("saveLogin")
         // sessionStorage.clear;
-        SignService.signin(info)
+        await SignService.signin(info)
             .then(response => {
 
                 //setUserToken(response.data.accessToken)
                 sessionStorage.setItem("infoUser", JSON.stringify(response.data.accessToken));
+                //comme effect de app ne fonctionne pas, set token ici
+                //même pb avec les posts si on delete tout et qu'on en rajoute
+                setUserToken(JSON.parse(sessionStorage.getItem("infoUser")));
                 setIsError(false);
                 //sessionStorage.clear();
                 //localStorage.clear();
@@ -67,8 +70,8 @@ export default function Login() {
     return (
         <div className="container flex mx-auto w-11/12 lg:w-9/12 justify-between items-center min-h-screen">
             {SVG.LOGOCOLOR}
-            <form onSubmit={handleSubmit(onSubmit)} method="submit" className="w-10/12 lg:w-5/12 mx-auto flex flex-col space-y-4 items-center bg-green-50 p-4 border border-blue-600 mb-4 rounded">
-                <h2 className="uppercase text-blue-600 my-5">Sign in to website</h2>
+            <form onSubmit={handleSubmit(onSubmit)} method="submit" className="w-10/12 lg:w-5/12 mx-auto flex flex-col space-y-4 items-center bg-red-100 p-4 border border-blue-600 mb-4 rounded">
+                <h2 className="uppercase text-primary my-5">Sign in to website</h2>
                 <div className="flex flex-col text-left">
                     <label className="px-4" htmlFor="email" > Email <span>*</span> </label>
                     <input type="email" id="email" placeholder="Votre adresse mail"
@@ -108,7 +111,7 @@ export default function Login() {
 
                     <button
                         type="submit"
-                        className="bg-blue-600 mx-auto text-white hover:bg-transparent hover:text-blue-600 rounded font-bold px-8 py-2">
+                        className="bg-primary mx-auto text-white hover:bg-transparent hover:text-primary rounded font-bold px-8 py-2">
                         Envoyer
                     </button>
                 </div>

@@ -13,6 +13,13 @@ export default function Post() {
     const { userToken, setUserToken } = useContext(UserContext);
     const [admin, setAdmin] = useState(false)
 
+
+    const wait = function (duration = 1000) {
+        return new Promise((resolve) => {
+            window.setTimeout(resolve, duration)
+        })
+    }
+
     const erasePost = (postId) => {
         console.log(posts[0].id)
         posts.map((post) => (
@@ -28,15 +35,13 @@ export default function Post() {
     }
 
     useEffect(() => {
-        let token = userToken;
-        PostService.getAll(token)
+        PostService.getAll(userToken)
             .then(response => {
 
-                //if (!response.data.length ==== 0) to not put else
+                //if (!response.data.length ==== 0) to not put else // don't work
                 if (response.data.length === 0) {
-                    console.log("vide")
+                    console.log("vide");
                 } else {
-                    console.log("pas vide");
                     let postNotRecent = response.data;
                     const postRecent = postNotRecent.reverse();
                     //console.log(postRecent);
@@ -60,10 +65,9 @@ export default function Post() {
             })
     }, [])
 
-    useEffect(() => {
-        document.title = 'Groupomania';
-        console.log(userToken)
-        UsersServices.isAdmin(userToken)
+    useEffect(async () => {
+        //await wait(2000);
+        await UsersServices.isAdmin(userToken)
             .then(response => {
                 console.log(response)
                 setAdmin(true)

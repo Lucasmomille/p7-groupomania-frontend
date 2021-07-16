@@ -1,14 +1,16 @@
 /* eslint-disable */
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import { NavLink, useHistory } from "react-router-dom";
 import * as ROUTES from '../constants/routes';
 import * as SVG from "../constants/svg"
-
+import UserContext from '../context/userContext';
 
 export default function Sidebar() {
+    const { userToken, setUserToken } = useContext(UserContext);
     // route pour logout
     // clear local storage
     const logOut = () => {
+        setUserToken(null);
         sessionStorage.clear();
     }
     return (

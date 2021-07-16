@@ -16,6 +16,7 @@ function App() {
 
   React.useEffect(() => {
     const info = JSON.parse(sessionStorage.getItem("infoUser")) || "";
+    //console.log(info)
     setUserToken(info)
   }, [])
 

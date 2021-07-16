@@ -1,8 +1,7 @@
-//import http from "../http-common";
 /* eslint-disable */
 import axios from 'axios'
 
-const getAll = (token) => {
+const isUser = (token) => {
     return axios.create({
         baseURL: "http://localhost:3000/api",
         headers: {
@@ -11,39 +10,24 @@ const getAll = (token) => {
         }
 
     }
-    ).get("/posts/all");
+    ).get("/users/user");
     // return http.get("/posts/all")
 };
 
-const create = (token, data) => {
+const isAdmin = (token) => {
     return axios.create({
         baseURL: "http://localhost:3000/api",
         headers: {
             "Content-type": "multipart/form-data",
             'x-access-token': `${token}`
-        },
-
+        }
 
     }
-    ).post("/posts", data);
-    // return http.get("/posts/all")
-};
-
-const deletePost = (token, id) => {
-    return axios.create({
-        baseURL: "http://localhost:3000/api",
-        headers: {
-            "Content-type": "multipart/form-data",
-            'x-access-token': `${token}`
-        },
-    }
-    ).delete(`/posts/${id}`);
+    ).get("/users/admin");
     // return http.get("/posts/all")
 };
 
 export default {
-    create,
-    getAll,
-    deletePost
-
+    isUser,
+    isAdmin
 };

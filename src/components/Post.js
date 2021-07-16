@@ -2,6 +2,8 @@
 import React, { useState, useContext, useEffect, Fragment } from "react";
 import { Link } from 'react-router-dom';
 import PostService from "../services/PostService";
+import UsersServices from "../services/UsersServices";
+
 import UserContext from '../context/userContext';
 import * as SVG from "../constants/svg";
 
@@ -9,17 +11,46 @@ export default function Post() {
     const [posts, setPost] = useState(null);
     //const [comments, setComments] = useState([]);
     const { userToken, setUserToken } = useContext(UserContext);
+    const [admin, setAdmin] = useState(false)
+
+    const erasePost = (postId) => {
+        console.log(posts[0].id)
+        posts.map((post) => (
+            PostService.deletePost(userToken, postId)
+                .then(response => {
+                    console.log("post deleted " + response)
+                    //console.log(post);
+                })
+                .catch(e => {
+                    console.log(e)
+                })
+        ))
+    }
 
     useEffect(() => {
         let token = userToken;
         PostService.getAll(token)
             .then(response => {
-                //console.log(response.data[0].comments);
+
+                //if (!response.data.length ==== 0) to not put else
                 if (response.data.length === 0) {
                     console.log("vide")
                 } else {
-                    console.log("pas vide")
-                    setPost(response.data)
+                    console.log("pas vide");
+                    let postNotRecent = response.data;
+                    const postRecent = postNotRecent.reverse();
+                    //console.log(postRecent);
+                    setPost(postRecent)
+
+                    /* for (let i = 0; i < postRecent.length; i++) {
+                        console.log("test" + postRecent[i].comments)
+                    } */
+                    /* postRecent.map((data) => (
+                        data.comments.map((comment) => (
+                           // let array = comment.isAnswer; doesn't work
+                           // comment.isAnswer.filter(item => item == true)
+                        ))
+                    )) */
                 }
 
                 //setComments(response.data[0].comments)
@@ -29,6 +60,21 @@ export default function Post() {
             })
     }, [])
 
+    useEffect(() => {
+        document.title = 'Groupomania';
+        console.log(userToken)
+        UsersServices.isAdmin(userToken)
+            .then(response => {
+                console.log(response)
+                setAdmin(true)
+            })
+            .catch(e => {
+                console.log(e)
+                setAdmin(false)
+            })
+
+    }, []);
+
     return (
         <Fragment>
             {!posts ? (
@@ -37,9 +83,12 @@ export default function Post() {
                 posts.map((post) => (
                     <div key={post.id} className="flex flex-col items-center text-left mb-16 relative rounded-md">
                         <img src={post.imageUrl} alt={post.title} className="w-9/12 rounded-t-md" />
-                        <button className="absolute text-white hover:bg-black rounded-full">
-                            {SVG.DELETE}
-                        </button>
+                        {admin ? (
+                            <button className="absolute text-white hover:bg-black rounded-full" onClick={() => erasePost(post.id)}>
+                                {SVG.DELETE}
+                            </button>
+                        ) : null}
+
                         <div className="w-9/12 border-gray-400 shadow-md bg-white">
 
                             <p className="p-4 pt-2 pb-1 w-full">

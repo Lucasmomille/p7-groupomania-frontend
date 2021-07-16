@@ -35,7 +35,7 @@ export default function Login() {
 
     const saveLogin = (info) => {
         console.log("saveLogin")
-
+        // sessionStorage.clear;
         SignService.signin(info)
             .then(response => {
 

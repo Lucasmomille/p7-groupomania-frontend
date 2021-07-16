@@ -30,7 +30,7 @@ export const LOGOWHITE = <svg
     width="485"
     height="78"
     viewBox="0 0 485 78"
-    className="w-9/12"
+    className="w-9/12 mx-auto"
 >
     <path
         fill="#fff"

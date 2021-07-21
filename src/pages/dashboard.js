@@ -4,6 +4,7 @@ import Sidebar from '../components/Sidebar';
 import PostService from "../services/PostService";
 import UsersServices from "../services/UsersServices";
 import UserContext from '../context/userContext';
+import PostContext from '../context/postContext';
 import Post from "../components/Post";
 
 
@@ -11,17 +12,24 @@ export default function Dashboard() {
     /* const [posts, setPost] = useState([]);
     const [comments, setComments] = useState([]); */
     const [file, setFile] = useState({ file: "" })
-
+    const { posts, setPost } = useContext(PostContext);
     const [title, setTitle] = useState({ title: "" })
     const [fileName, setFileName] = useState()
     const { userToken, setUserToken } = useContext(UserContext);
+    //const { posts, setPost } = useContext(PostContext)
+
+    const wait = function (duration = 1000) {
+        return new Promise((resolve) => {
+            window.setTimeout(resolve, duration)
+        })
+    }
 
     const handleFile = (e) => {
         console.log(e)
         const file = e.target.files[0];
 
         setFileName(file.name);
-        console.log(fileName);
+        //console.log(fileName);
         setFile({ file: file })
     }
 
@@ -31,36 +39,52 @@ export default function Dashboard() {
     }
 
 
-    const onSubmit = async e => {
+    const onSubmit = async (e, id) => {
         e.preventDefault();
         const formData = new FormData();
-        formData.append('file', file);
-        // formData.append('image', file.file.name);
+        formData.append('image', file.file);
         formData.append('title', title);
-
-        for (var pair of formData.entries()) {
-            console.log(pair[0] + ', ' + pair[1]);
-        }
         console.log(file)
-        let data = {
-            "title": title,
-            "image": formData
-        }
         await PostService.create(userToken, formData)
-            .then(
-                console.log('File Uploaded')
+            .then(response => {
+                console.log('File Uploaded', response)
+                setFileName();
+                setTitle();
+                /* let newPosts = response.data;
+                let oldPosts = [...posts]
+                console.log("new create", response.data);
+                oldPosts.push(newPosts);
+                setPost(oldPosts);
+ */
+            }
+
             )
             .catch(err => {
                 console.log(err);
             }
             );
-
-
     };
+
     useEffect(() => {
         document.title = 'Groupomania';
-
     }, []);
+
+    useEffect(() => {
+        PostService.getAll(userToken)
+            .then(response => {
+                if (response.data.length === 0) {
+                    console.log("vide");
+                } else {
+                    let postNotRecent = response.data;
+                    const postRecent = postNotRecent.reverse();
+                    setPost(postRecent)
+                }
+
+            })
+            .catch(e => {
+                console.log(e)
+            })
+    }, [])
 
     return (
         <main className="flex w-full">

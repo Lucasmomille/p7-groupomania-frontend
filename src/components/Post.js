@@ -3,12 +3,14 @@ import React, { useState, useContext, useEffect, Fragment } from "react";
 import { Link } from 'react-router-dom';
 import PostService from "../services/PostService";
 import UsersServices from "../services/UsersServices";
+import PostContext from '../context/postContext';
 
 import UserContext from '../context/userContext';
 import * as SVG from "../constants/svg";
 
 export default function Post() {
-    const [posts, setPost] = useState(null);
+
+    const { posts, setPost } = useContext(PostContext);
     //const [comments, setComments] = useState([]);
     const { userToken, setUserToken } = useContext(UserContext);
     const [admin, setAdmin] = useState(false)
@@ -21,59 +23,32 @@ export default function Post() {
     }
 
     const erasePost = (postId) => {
-        console.log(posts[0].id)
-        posts.map((post) => (
-            PostService.deletePost(userToken, postId)
-                .then(response => {
-                    console.log("post deleted " + response)
-                    //console.log(post);
-                })
-                .catch(e => {
-                    console.log(e)
-                })
-        ))
-    }
-
-    useEffect(() => {
-        PostService.getAll(userToken)
+        //console.log(posts[0].id);
+        PostService.deletePost(userToken, postId)
             .then(response => {
-
-                //if (!response.data.length ==== 0) to not put else // don't work
-                if (response.data.length === 0) {
-                    console.log("vide");
-                } else {
-                    let postNotRecent = response.data;
-                    const postRecent = postNotRecent.reverse();
-                    //console.log(postRecent);
-                    setPost(postRecent)
-
-                    /* for (let i = 0; i < postRecent.length; i++) {
-                        console.log("test" + postRecent[i].comments)
-                    } */
-                    /* postRecent.map((data) => (
-                        data.comments.map((comment) => (
-                           // let array = comment.isAnswer; doesn't work
-                           // comment.isAnswer.filter(item => item == true)
-                        ))
-                    )) */
-                }
-
-                //setComments(response.data[0].comments)
+                console.log("post deleted " + response)
+                //console.log(post);
+                let newPosts = [...posts];
+                console.log("new", newPosts)
+                let index = newPosts.findIndex(elt => elt.id === postId);
+                newPosts.splice(index, 1);
+                setPost(newPosts);
             })
             .catch(e => {
                 console.log(e)
             })
-    }, [])
+    }
+
+
 
     useEffect(async () => {
-        //await wait(2000);
         await UsersServices.isAdmin(userToken)
             .then(response => {
-                console.log(response)
+                // console.log(response)
                 setAdmin(true)
             })
             .catch(e => {
-                console.log(e)
+                // console.log(e)
                 setAdmin(false)
             })
 
@@ -81,7 +56,7 @@ export default function Post() {
 
     return (
         <Fragment>
-            {!posts ? (
+            {!posts || posts.length === 0 ? (
                 <div className="text-bold bg-red-400 text-white p-2">Pas de post encore :( </div>
             ) : (
                 posts.map((post) => (
@@ -96,7 +71,7 @@ export default function Post() {
                         <div className="w-9/12 border-gray-400 shadow-md bg-white">
 
                             <p className="p-4 pt-2 pb-1 w-full">
-                                <span className="mr-1 font-bold">{post.userId}</span>
+                                <span className="mr-1 font-bold">{post.users.firstname + ' ' + post.users.lastname}</span>
                                 <span className=" italic text-xl">{post.title}</span>
                             </p>
                             <p className="p-4 py-0 font-bold mb-2">{post.likes} likes</p>

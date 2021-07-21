@@ -27,10 +27,11 @@ const isAdmin = (token) => {
 };
 
 const updateUser = (token, data) => {
+    console.log(token)
     return axios.create({
         baseURL: "http://localhost:3000/api",
         headers: {
-            "Content-type": "multipart/form-data",
+            "Content-type": "application/json",
             'x-access-token': `${token}`
         }
 

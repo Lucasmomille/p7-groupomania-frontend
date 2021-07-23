@@ -38,15 +38,12 @@ export default function Login() {
         // sessionStorage.clear;
         await SignService.signin(info)
             .then(response => {
-
-                //setUserToken(response.data.accessToken)
+                //console.log(response.data);
                 sessionStorage.setItem("infoUser", JSON.stringify(response.data.accessToken));
-                //comme effect de app ne fonctionne pas, set token ici
-                //même pb avec les posts si on delete tout et qu'on en rajoute
+                sessionStorage.setItem("nameUser", JSON.stringify(response.data.firstname));
                 setUserToken(JSON.parse(sessionStorage.getItem("infoUser")));
                 setIsError(false);
-                //sessionStorage.clear();
-                //localStorage.clear();
+
             })
             .catch(e => {
                 if (e) {

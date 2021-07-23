@@ -3,6 +3,7 @@ import React, { useState, useContext, useEffect, Fragment } from "react";
 import { Link } from 'react-router-dom';
 import PostService from "../services/PostService";
 import UsersServices from "../services/UsersServices";
+import CommentServices from "../services/CommentService";
 import PostContext from '../context/postContext';
 
 import UserContext from '../context/userContext';
@@ -11,15 +12,87 @@ import * as SVG from "../constants/svg";
 export default function Post() {
 
     const { posts, setPost } = useContext(PostContext);
-    //const [comments, setComments] = useState([]);
+    const [comments, setComments] = useState();
+    const [isCommentAnswer, setIsCommentAnswer] = useState();
+    const [message, setMessage] = useState();
+    const [postId, setPostId] = useState();
     const { userToken, setUserToken } = useContext(UserContext);
     const [admin, setAdmin] = useState(false)
+    const [like, setLike] = useState(0);
+    const [user, setUser] = useState();
 
+
+
+    const incrementCounter = () => {
+        if (like === 0) {
+            /// and if user.id / req.id != like userId
+            setLike(like + 1)
+        } else {
+            setLike(0)
+        }
+    }
+        ;
 
     const wait = function (duration = 1000) {
         return new Promise((resolve) => {
             window.setTimeout(resolve, duration)
         })
+    }
+
+    const test = (id) => {
+
+        for (const post of posts) {
+            if (post.id === id) {
+                console.log("ok")
+                console.log(user)
+            }
+            let commentsArray = post.comments;
+            // console.log(commentsArray);
+            /* for (const comment of commentsArray) {
+                console.log(comment.isAnswer)
+                //comment is an object so it can't work
+                let isCommentAnswer = comment.filter(comment.isAnswer === true)
+                console.log(isCommentAnswer);
+            } */
+
+            //let isCommentAnswer = commentsArray.filter(comment.isAnswer => comment.isAnswer === true )
+
+        }
+    }
+
+    /*   { isCommentAnswer ? (
+          {isCommentAnswerId === comment.id ?}
+      )} */
+
+    const submitComment = async (e, id) => {
+        e.preventDefault();
+        let info = {
+            "message": message,
+            "postId": postId,
+        }
+        console.log("before")
+        await CommentServices.create(userToken, info)
+            .then(response => {
+                let newComment = response.data;
+                let commentsArray;
+                for (const post of posts) {
+                    if (post.id === postId) {
+                        commentsArray = post.comments;
+                        commentsArray.push(newComment);
+
+                        let lastComment = commentsArray[commentsArray.length - 1];
+                        let newCommentArray = Object.assign(lastComment, user);
+                    }
+
+                }
+
+                let newPosts = [...posts];
+                setPost(newPosts);
+            })
+            .catch(err => {
+                console.log(err);
+            }
+            )
     }
 
     const erasePost = (postId) => {
@@ -50,9 +123,31 @@ export default function Post() {
             .catch(e => {
                 // console.log(e)
                 setAdmin(false)
+            });
+
+        await UsersServices.getUser(userToken)
+            .then(response => {
+                console.log(response.data);
+                let userData = {
+                    "users": response.data
+                }
+                console.log(userData);
+                setUser(userData)
+            })
+            .catch(e => {
+                console.log(e)
             })
 
     }, []);
+    /* 
+        useEffect(() => {
+            posts.map((post) => {
+                post.comments.map((comment) =>
+                    //console.log(comment)
+                    setComments(comment)
+                )
+            })
+        }, []) */
 
     return (
         <Fragment>
@@ -75,13 +170,16 @@ export default function Post() {
                                 <span className=" italic text-xl">{post.title}</span>
                             </p>
                             <p className="p-4 py-0 font-bold mb-2">{post.likes} likes</p>
+                            <button className="rounded-md bg-red-300 p-2" onClick={incrementCounter}>+1</button>
+                            <p>{like}</p>
                             {post.comments.map((comment) => (
                                 <div key={comment.id} className="p-4 pt-1 pb-4 w-full text-left">
                                     <p className="mb-1" >
-                                        <a className="mr-1 font-bold">{comment.userId}</a>
+                                        <a className="mr-1 font-bold">{comment.users.firstname}</a>
                                         <span>{comment.message}</span>
                                     </p>
                                 </div>
+
                             ))}
                             <div className="border-t border-gray-300">
                                 <form className="flex justify-between pl-0 pr-5"
@@ -94,16 +192,18 @@ export default function Post() {
                                         type="text"
                                         name="add-comment"
                                         placeholder="Add a comment..."
-
+                                        onChange={(e) => setMessage(e.target.value)}
+                                        onFocus={() => setPostId(post.id)}
                                     />
                                     <button
                                         className={`text-sm font-bold text-primary`}
                                         type="button"
-
+                                        onClick={submitComment}
                                     >
                                         Post
                                     </button>
                                 </form>
+                                <button onClick={() => test(post.id)}>test</button>
                             </div>
                         </div>
                     </div>
@@ -113,3 +213,7 @@ export default function Post() {
         </Fragment>
     )
 }
+
+/* {post.comments.map((comment) => (
+    -> <Comment prop = comment> </Comment>
+    */

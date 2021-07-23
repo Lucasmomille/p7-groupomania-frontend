@@ -11,6 +11,7 @@ import Post from "../components/Post";
 export default function Dashboard() {
     /* const [posts, setPost] = useState([]);
     const [comments, setComments] = useState([]); */
+
     const [file, setFile] = useState({ file: "" })
     const { posts, setPost } = useContext(PostContext);
     const [title, setTitle] = useState({ title: "" })
@@ -39,7 +40,7 @@ export default function Dashboard() {
     }
 
 
-    const onSubmit = async (e, id) => {
+    const onSubmit = async e => {
         e.preventDefault();
         const formData = new FormData();
         formData.append('image', file.file);
@@ -57,7 +58,6 @@ export default function Dashboard() {
                 setPost(oldPosts);
  */
             }
-
             )
             .catch(err => {
                 console.log(err);
@@ -77,7 +77,13 @@ export default function Dashboard() {
                 } else {
                     let postNotRecent = response.data;
                     const postRecent = postNotRecent.reverse();
+                    /* for (const post of postRecent) {
+                        let commentRecent = post.comments.reverse();
+                        post.comments = commentRecent;
+                        console.log(post.comments)
+                    } */
                     setPost(postRecent)
+                    console.log("rerender get all");
                 }
 
             })

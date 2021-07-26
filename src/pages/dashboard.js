@@ -83,7 +83,7 @@ export default function Dashboard() {
                         console.log(post.comments)
                     } */
                     setPost(postRecent)
-                    console.log("rerender get all");
+                    console.log(response.data);
                 }
 
             })
@@ -95,7 +95,7 @@ export default function Dashboard() {
     return (
         <main className="flex w-full">
             <Sidebar></Sidebar>
-            <div className="bg-gray-50 mx-auto px-12 lg:text-left text-center w-7/12 mt-16 pt-10 flex flex-col rounded-md">
+            <div className="bg-gray-50 mx-auto px-12 lg:text-left text-center lg:w-7/12 w-10/12 mt-16 pt-10 flex flex-col rounded-md">
 
                 <form className="flex flex-col mx-auto space-y-6 bg-red-100 w-9/12 mb-12 p-4 rounded-md" onSubmit={onSubmit}>
                     <label>Titre du post</label>

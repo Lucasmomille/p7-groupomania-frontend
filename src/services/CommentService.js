@@ -15,7 +15,21 @@ const create = (token, data) => {
     // return http.get("/posts/all")
 };
 
+const deleteComment = (token, id) => {
+    return axios.create({
+        baseURL: "http://localhost:3000/api",
+        headers: {
+            "Content-type": "application/json",
+            'x-access-token': `${token}`
+        },
+
+
+    }
+    ).delete(`/comments/${id}`);
+    // return http.get("/posts/all")
+};
+
 export default {
     create,
-    //deleteComment
+    deleteComment
 };

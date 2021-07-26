@@ -5,14 +5,13 @@ import PostService from "../services/PostService";
 import UsersServices from "../services/UsersServices";
 import CommentServices from "../services/CommentService";
 import PostContext from '../context/postContext';
-
+import CommentService from "../services/CommentService";
 import UserContext from '../context/userContext';
 import * as SVG from "../constants/svg";
 
 export default function Post() {
 
     const { posts, setPost } = useContext(PostContext);
-    const [comments, setComments] = useState();
     const [isCommentAnswer, setIsCommentAnswer] = useState();
     const [message, setMessage] = useState();
     const [postId, setPostId] = useState();
@@ -21,8 +20,6 @@ export default function Post() {
     const [like, setLike] = useState(0);
     const [user, setUser] = useState();
 
-
-
     const incrementCounter = () => {
         if (like === 0) {
             /// and if user.id / req.id != like userId
@@ -30,13 +27,27 @@ export default function Post() {
         } else {
             setLike(0)
         }
-    }
-        ;
+    };
 
-    const wait = function (duration = 1000) {
-        return new Promise((resolve) => {
-            window.setTimeout(resolve, duration)
-        })
+    const updateLike = async (e, postid) => {
+        e.preventDefault();
+
+        let data = {
+            "postId": postid,
+            //"userId": user.users.id
+        };
+        // if user.users.id === posts.likes.userId
+        // delete like
+
+        await PostService.createLike(userToken, data)
+            .then(response => {
+                console.log("like update ", response)
+                //console.log(post);
+
+            })
+            .catch(e => {
+                console.log(e)
+            })
     }
 
     const test = (id) => {
@@ -83,9 +94,7 @@ export default function Post() {
                         let lastComment = commentsArray[commentsArray.length - 1];
                         let newCommentArray = Object.assign(lastComment, user);
                     }
-
                 }
-
                 let newPosts = [...posts];
                 setPost(newPosts);
             })
@@ -112,6 +121,16 @@ export default function Post() {
             })
     }
 
+    const eraseComment = (commentId) => {
+        CommentService.deleteComment(userToken, commentId)
+            .then(response => {
+                console.log("deleted", response)
+            })
+            .catch(e => {
+                console.log(e)
+            })
+    }
+
 
 
     useEffect(async () => {
@@ -127,11 +146,10 @@ export default function Post() {
 
         await UsersServices.getUser(userToken)
             .then(response => {
-                console.log(response.data);
                 let userData = {
                     "users": response.data
                 }
-                console.log(userData);
+                console.log(userData.users.id)
                 setUser(userData)
             })
             .catch(e => {
@@ -139,15 +157,6 @@ export default function Post() {
             })
 
     }, []);
-    /* 
-        useEffect(() => {
-            posts.map((post) => {
-                post.comments.map((comment) =>
-                    //console.log(comment)
-                    setComments(comment)
-                )
-            })
-        }, []) */
 
     return (
         <Fragment>
@@ -169,15 +178,18 @@ export default function Post() {
                                 <span className="mr-1 font-bold">{post.users.firstname + ' ' + post.users.lastname}</span>
                                 <span className=" italic text-xl">{post.title}</span>
                             </p>
-                            <p className="p-4 py-0 font-bold mb-2">{post.likes} likes</p>
+                            <p className="p-4 py-0 font-bold mb-2">{post.likes.length} likes</p>
                             <button className="rounded-md bg-red-300 p-2" onClick={incrementCounter}>+1</button>
                             <p>{like}</p>
                             {post.comments.map((comment) => (
-                                <div key={comment.id} className="p-4 pt-1 pb-4 w-full text-left">
-                                    <p className="mb-1" >
+                                <div key={comment.id} className="p-4 pt-1 pb-4 w-full text-left relative">
+                                    <p className="mb-1 " >
                                         <a className="mr-1 font-bold">{comment.users.firstname}</a>
                                         <span>{comment.message}</span>
                                     </p>
+                                    <button className="absolute top-0 right-0 text-black hover:bg-red-500 rounded-full" onClick={() => eraseComment(comment.id)}>
+                                        {SVG.DELETE}
+                                    </button>
                                 </div>
 
                             ))}
@@ -203,7 +215,7 @@ export default function Post() {
                                         Post
                                     </button>
                                 </form>
-                                <button onClick={() => test(post.id)}>test</button>
+                                <button onClick={(e) => updateLike(e, post.id)}>test</button>
                             </div>
                         </div>
                     </div>

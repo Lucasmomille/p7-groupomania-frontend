@@ -65,9 +65,9 @@ export default function Login() {
     }, []);
 
     return (
-        <div className="container flex mx-auto w-11/12 lg:w-9/12 justify-between items-center min-h-screen">
+        <div className="container flex lg:flex-row flex-col mx-auto w-11/12 lg:w-9/12 justify-between items-center min-h-screen">
             {SVG.LOGOCOLOR}
-            <form onSubmit={handleSubmit(onSubmit)} method="submit" className="w-10/12 lg:w-5/12 mx-auto flex flex-col space-y-4 items-center bg-red-100 p-4 border border-blue-600 mb-4 rounded">
+            <form onSubmit={handleSubmit(onSubmit)} method="submit" className="w-11/12 lg:w-5/12 mx-auto flex flex-col space-y-4 items-center bg-red-100 p-4 border border-blue-600 mb-4 rounded">
                 <h2 className="uppercase text-primary my-5">Sign in to website</h2>
                 <div className="flex flex-col text-left">
                     <label className="px-4" htmlFor="email" > Email <span>*</span> </label>
@@ -104,13 +104,20 @@ export default function Login() {
                     {isError && <span className="text-red-500 text-xs mt-1 mb-2">Mot de passe invalide</span>}
 
                 </div>
-                <div className="flex text-center items-center w-10/12 mb-5">
+                <div className="flex flex-col  text-center items-center w-10/12 mb-5">
 
                     <button
                         type="submit"
                         className="bg-primary mx-auto text-white hover:bg-transparent hover:text-primary rounded font-bold px-8 py-2">
                         Envoyer
                     </button>
+
+                    <p className="text-sm">
+                        Tu n'as pas de compte ?{` `}
+                        <Link to={ROUTES.SIGNUP} className="font-bold text-primary">
+                            Sign Up !
+                        </Link>
+                    </p>
                 </div>
 
             </form>

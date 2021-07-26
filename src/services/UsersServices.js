@@ -50,9 +50,21 @@ const getUser = (token) => {
     ).get("/users");
 };
 
+const deleteUser = (token, id) => {
+    return axios.create({
+        baseURL: "http://localhost:3000/api",
+        headers: {
+            "Content-type": "multipart/form-data",
+            'x-access-token': `${token}`
+        }
+    }
+    ).delete(`/users/${id}`);
+};
+
 export default {
     isUser,
     isAdmin,
     updateUser,
-    getUser
+    getUser,
+    deleteUser
 };

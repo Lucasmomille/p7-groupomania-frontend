@@ -4,17 +4,20 @@ import { NavLink, useHistory } from "react-router-dom";
 import * as ROUTES from '../constants/routes';
 import * as SVG from "../constants/svg"
 import UserContext from '../context/userContext';
+import PostContext from '../context/postContext';
 
 export default function Sidebar() {
     const { userToken, setUserToken } = useContext(UserContext);
+    const { posts, setPost } = useContext(PostContext);
     // route pour logout
     // clear local storage
     const logOut = () => {
         setUserToken(null);
+        setPost(null);
         sessionStorage.clear();
     }
     return (
-        <div className="w-3/12 bg-primary text-white min-h-screen flex flex-col items-center p-4 relative ">
+        <div className="lg:w-3/12 w-1/12 bg-primary text-white min-h-screen flex flex-col items-center p-4 relative ">
             <div className="fixed flex w-3/12">
                 {SVG.LOGOWHITE}
             </div>

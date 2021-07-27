@@ -22,12 +22,6 @@ function App() {
     setUserToken(info)
   }, [])
 
-  // sortir info au dessus, mettre info en dépendance ne regle pas pb
-
-  /* React.useEffect(() => {
-    sessionStorage.setItem("infoUser", JSON.stringify(userToken));
-
-  }, [userToken]) */
   return (
     <div >
       <UserContext.Provider value={{ userToken, setUserToken }}>

@@ -26,7 +26,6 @@ export default function Dashboard() {
     }
 
     const handleFile = (e) => {
-        console.log(e)
         const file = e.target.files[0];
 
         setFileName(file.name);
@@ -45,7 +44,6 @@ export default function Dashboard() {
         const formData = new FormData();
         formData.append('image', file.file);
         formData.append('title', title);
-        console.log(file)
         await PostService.create(userToken, formData)
             .then(response => {
                 console.log('File Uploaded', response)
@@ -83,7 +81,7 @@ export default function Dashboard() {
                         console.log(post.comments)
                     } */
                     setPost(postRecent)
-                    console.log(response.data);
+                    //console.log(response.data);
                 }
 
             })

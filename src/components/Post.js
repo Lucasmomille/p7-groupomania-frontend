@@ -54,8 +54,32 @@ export default function Post() {
 
         for (const post of posts) {
             if (post.id === id) {
-                console.log("ok")
-                console.log(user)
+                console.log("ok");
+                let likes = post.likes;
+                for (const like of likes) {
+                    let data = { "postId": post.id };
+                    if (like.userId !== user.users.id) {
+                        PostService.createLike(userToken, data)
+                            .then(response => {
+                                console.log(response);
+                            })
+                            .catch(err => {
+                                console.log(err);
+                            }
+                            )
+                    } else {
+                        PostService.deleteLike(userToken, like.id, post.id)
+                            .then(response => {
+                                console.log(response);
+                            })
+                            .catch(err => {
+                                console.log(err);
+                            }
+                            )
+                    }
+                }
+                // console.log(user.users.id)
+
             }
             let commentsArray = post.comments;
             // console.log(commentsArray);
@@ -149,7 +173,7 @@ export default function Post() {
                 let userData = {
                     "users": response.data
                 }
-                console.log(userData.users.id)
+                //console.log(userData.users.id)
                 setUser(userData)
             })
             .catch(e => {
@@ -215,7 +239,7 @@ export default function Post() {
                                         Post
                                     </button>
                                 </form>
-                                <button onClick={(e) => updateLike(e, post.id)}>test</button>
+                                <button onClick={() => test(post.id)}>test</button>
                             </div>
                         </div>
                     </div>
@@ -226,6 +250,7 @@ export default function Post() {
     )
 }
 
-/* {post.comments.map((comment) => (
+/* onClick={(e) => updateLike(e, post.id)
+{post.comments.map((comment) => (
     -> <Comment prop = comment> </Comment>
     */

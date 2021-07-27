@@ -43,6 +43,17 @@ const createLike = (token, data) => {
     // return http.get("/posts/all")
 };
 
+const deleteLike = (token, id, data) => {
+    return axios.delete(`http://localhost:3000/api/posts/likes/${id}`, {
+        headers: {
+            "Content-type": "application/json",
+            'x-access-token': `${token}`
+        },
+        data: { postId: data }
+    });
+    // return http.get("/posts/all")
+};
+
 const deletePost = (token, id) => {
     return axios.create({
         baseURL: "http://localhost:3000/api",
@@ -59,6 +70,7 @@ export default {
     create,
     getAll,
     deletePost,
-    createLike
+    createLike,
+    deleteLike
 
 };

@@ -54,6 +54,20 @@ const deleteLike = (token, id, data) => {
     // return http.get("/posts/all")
 };
 
+const updateLike = (token, data) => {
+    return axios.create({
+        baseURL: "http://localhost:3000/api",
+        headers: {
+            "Content-type": "application/json",
+            'x-access-token': `${token}`
+        },
+
+
+    }
+    ).post(`/posts/likes/two`, data);
+    // return http.get("/posts/all")
+};
+
 const deletePost = (token, id) => {
     return axios.create({
         baseURL: "http://localhost:3000/api",

@@ -38,9 +38,10 @@ export default function Login() {
         // sessionStorage.clear;
         await SignService.signin(info)
             .then(response => {
-                //console.log(response.data);
+                //console.log(response.data.id);
                 sessionStorage.setItem("infoUser", JSON.stringify(response.data.accessToken));
                 sessionStorage.setItem("nameUser", JSON.stringify(response.data.firstname));
+                sessionStorage.setItem("idUser", JSON.stringify(response.data.id));
                 setUserToken(JSON.parse(sessionStorage.getItem("infoUser")));
                 setIsError(false);
 

@@ -7,18 +7,21 @@ import CommentServices from "../services/CommentService";
 import PostContext from '../context/postContext';
 import CommentService from "../services/CommentService";
 import UserContext from '../context/userContext';
+import isLiked from '../hooks/isLiked';
 import * as SVG from "../constants/svg";
 
 export default function Post() {
 
     const { posts, setPost } = useContext(PostContext);
-    const [isCommentAnswer, setIsCommentAnswer] = useState();
     const [message, setMessage] = useState();
     const [postId, setPostId] = useState();
     const { userToken, setUserToken } = useContext(UserContext);
     const [admin, setAdmin] = useState(false)
     const [like, setLike] = useState(0);
     const [user, setUser] = useState();
+    const [isLiked, setIsLiked] = useState(false);
+
+    // const { isUserLiked } = isLiked();
 
     const incrementCounter = () => {
         if (like === 0) {
@@ -55,49 +58,91 @@ export default function Post() {
         for (const post of posts) {
             if (post.id === id) {
                 console.log("ok");
+                //console.log(post.likes)
                 let likes = post.likes;
-                for (const like of likes) {
-                    let data = { "postId": post.id };
-                    if (like.userId !== user.users.id) {
-                        PostService.createLike(userToken, data)
-                            .then(response => {
-                                console.log(response);
-                            })
-                            .catch(err => {
-                                console.log(err);
-                            }
-                            )
-                    } else {
-                        PostService.deleteLike(userToken, like.id, post.id)
-                            .then(response => {
-                                console.log(response);
-                            })
-                            .catch(err => {
-                                console.log(err);
-                            }
-                            )
+                let data = {
+                    postId: post.id
+                }
+                //console.log(likes.length)
+                let index = likes.findIndex(elt => elt.userId === user.users.id);
+                console.log(index)
+                if (index === -1) {
+                    console.log("empty or not liked")
+                    PostService.createLike(userToken, data)
+                        .then(response => {
+                            console.log(response);
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        }
+                        )
+                } else {
+                    console.log("is already liked")
+                    for (const like of likes) {
+
+                        if (like.userId === user.users.id) {
+                            console.log("likeid", like.id)
+                            PostService.deleteLike(userToken, like.id, post.id)
+                                .then(response => {
+                                    console.log(response);
+                                })
+                                .catch(err => {
+                                    console.log(err);
+                                }
+                                )
+                        }
                     }
                 }
+                /* if (likes.length === 0) {
+                    console.log("empty")
+                    // create Like
+                    PostService.createLike(userToken, data)
+                        .then(response => {
+                            console.log(response);
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        }
+                        )
+                    setIsLiked(false)
+                } else if (likes.length > 1) {
+                    console.log("more than 1")
+                } else if (likes.length === 1) {
+                    for (const like of likes) {
+                        console.log(like)
+                        if (like.userId === user.users.id) {
+                            console.log("is already liked")
+                            setIsLiked(true)
+                            PostService.deleteLike(userToken, like.id, post.id)
+                                .then(response => {
+                                    console.log(response);
+                                })
+                                .catch(err => {
+                                    console.log(err);
+                                }
+                                )
+                        } else {
+                            console.log("it's not")
+                            setIsLiked(false)
+
+                            PostService.createLike(userToken, data)
+                                .then(response => {
+                                    console.log(response);
+                                })
+                                .catch(err => {
+                                    console.log(err);
+                                }
+                                )
+                        }
+
+                    }
+                } */
+
                 // console.log(user.users.id)
 
             }
-            let commentsArray = post.comments;
-            // console.log(commentsArray);
-            /* for (const comment of commentsArray) {
-                console.log(comment.isAnswer)
-                //comment is an object so it can't work
-                let isCommentAnswer = comment.filter(comment.isAnswer === true)
-                console.log(isCommentAnswer);
-            } */
-
-            //let isCommentAnswer = commentsArray.filter(comment.isAnswer => comment.isAnswer === true )
-
         }
     }
-
-    /*   { isCommentAnswer ? (
-          {isCommentAnswerId === comment.id ?}
-      )} */
 
     const submitComment = async (e, id) => {
         e.preventDefault();
@@ -178,9 +223,11 @@ export default function Post() {
             })
             .catch(e => {
                 console.log(e)
-            })
+            });
+
 
     }, []);
+
 
     return (
         <Fragment>
@@ -240,6 +287,12 @@ export default function Post() {
                                     </button>
                                 </form>
                                 <button onClick={() => test(post.id)}>test</button>
+                                {isLiked ? (
+                                    <p>yes</p>
+                                ) : (
+                                    <p>no</p>
+                                )}
+
                             </div>
                         </div>
                     </div>

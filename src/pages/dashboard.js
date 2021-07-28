@@ -75,13 +75,8 @@ export default function Dashboard() {
                 } else {
                     let postNotRecent = response.data;
                     const postRecent = postNotRecent.reverse();
-                    /* for (const post of postRecent) {
-                        let commentRecent = post.comments.reverse();
-                        post.comments = commentRecent;
-                        console.log(post.comments)
-                    } */
                     setPost(postRecent)
-                    //console.log(response.data);
+
                 }
 
             })

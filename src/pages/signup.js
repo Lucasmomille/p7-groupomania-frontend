@@ -1,8 +1,8 @@
-// eslint-disable-next-line
+/* eslint-disable */
 import { useState, useContext, useEffect, useRef } from 'react';
 
 import { useForm } from "react-hook-form";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import SignService from "../services/SignService"
 import * as ROUTES from '../constants/routes';
 
@@ -13,10 +13,8 @@ const wait = function (duration = 1000) {
 }
 
 export default function SignUp() {
-    /* eslint-disable */
-    const history = useHistory();
 
-    // eslint-disable-next-line
+    const history = useHistory();
     const { register, handleSubmit, formState: { errors }, formState, watch } = useForm();
 
     const { isSubmitSuccessful } = formState
@@ -46,11 +44,10 @@ export default function SignUp() {
             firstname: data["firstname"],
             email: data["email"],
             password: data["password"],
-
         };
         saveSignUp(info);
         await wait(2000)
-        // history.push(ROUTES.LOGIN);
+        history.push(ROUTES.LOGIN);
     }
     /* eslint-disable */
     const saveSignUp = (info) => {

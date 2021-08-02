@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useState, useContext, useEffect, Fragment } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import PostService from "../services/PostService";
 import UsersServices from "../services/UsersServices";
@@ -7,10 +7,12 @@ import CommentServices from "../services/CommentService";
 import PostContext from '../context/postContext';
 import CommentService from "../services/CommentService";
 import UserContext from '../context/userContext';
+import UserInfoContext from '../context/userInfoContext';
 import isLiked from '../hooks/isLiked';
 import * as SVG from "../constants/svg";
 
-export default function Post() {
+export default function Post(props) {
+    const post = props.post;
 
     const { posts, setPost } = useContext(PostContext);
     const [message, setMessage] = useState();
@@ -18,11 +20,12 @@ export default function Post() {
     const { userToken, setUserToken } = useContext(UserContext);
     const [admin, setAdmin] = useState(false)
     const [like, setLike] = useState(0);
-    const [user, setUser] = useState();
+    const { user, setUser } = useContext(UserInfoContext);
     const [isLiked, setIsLiked] = useState(false);
 
-    // const { isUserLiked } = isLiked();
 
+    const [toggleLiked, setToggleLiked] = useState(0);
+    // const { isUserLiked } = isLiked();
     const incrementCounter = () => {
         if (like === 0) {
             /// and if user.id / req.id != like userId
@@ -55,7 +58,17 @@ export default function Post() {
 
     const test = (id) => {
 
+        let likes = post.likes;
+        //let userId = JSON.parse(sessionStorage.getItem("idUser"))
+        let index = likes.findIndex(elt => elt.userId === user.users.id);
+        if (index > -1) {
+            console.log("is liked")
+            setIsLiked(false)
+        }
+
         for (const post of posts) {
+
+
             if (post.id === id) {
                 console.log("ok");
                 //console.log(post.likes)
@@ -78,25 +91,9 @@ export default function Post() {
                         )
                 } else {
                     console.log("is already liked")
-                    for (const like of likes) {
-
-                        if (like.userId === user.users.id) {
-                            console.log("likeid", like.id)
-                            PostService.deleteLike(userToken, like.id, post.id)
-                                .then(response => {
-                                    console.log(response);
-                                })
-                                .catch(err => {
-                                    console.log(err);
-                                }
-                                )
-                        }
-                    }
-                }
-                /* if (likes.length === 0) {
-                    console.log("empty")
-                    // create Like
-                    PostService.createLike(userToken, data)
+                    const myLike = likes[index].id;
+                    console.log(myLike);
+                    PostService.deleteLike(userToken, myLike, post.id)
                         .then(response => {
                             console.log(response);
                         })
@@ -104,44 +101,11 @@ export default function Post() {
                             console.log(err);
                         }
                         )
-                    setIsLiked(false)
-                } else if (likes.length > 1) {
-                    console.log("more than 1")
-                } else if (likes.length === 1) {
-                    for (const like of likes) {
-                        console.log(like)
-                        if (like.userId === user.users.id) {
-                            console.log("is already liked")
-                            setIsLiked(true)
-                            PostService.deleteLike(userToken, like.id, post.id)
-                                .then(response => {
-                                    console.log(response);
-                                })
-                                .catch(err => {
-                                    console.log(err);
-                                }
-                                )
-                        } else {
-                            console.log("it's not")
-                            setIsLiked(false)
-
-                            PostService.createLike(userToken, data)
-                                .then(response => {
-                                    console.log(response);
-                                })
-                                .catch(err => {
-                                    console.log(err);
-                                }
-                                )
-                        }
-
-                    }
-                } */
-
-                // console.log(user.users.id)
+                }
 
             }
         }
+
     }
 
     const submitComment = async (e, id) => {
@@ -213,97 +177,115 @@ export default function Post() {
                 setAdmin(false)
             });
 
-        await UsersServices.getUser(userToken)
-            .then(response => {
-                let userData = {
-                    "users": response.data
-                }
-                //console.log(userData.users.id)
-                setUser(userData)
-            })
-            .catch(e => {
-                console.log(e)
-            });
-
+        //console.log("post", posts)
 
     }, []);
 
 
     return (
-        <Fragment>
-            {!posts || posts.length === 0 ? (
-                <div className="text-bold bg-red-400 text-white p-2">Pas de post encore :( </div>
-            ) : (
-                posts.map((post) => (
-                    <div key={post.id} className="flex flex-col items-center text-left mb-16 relative rounded-md">
-                        <img src={post.imageUrl} alt={post.title} className="w-9/12 rounded-t-md" />
-                        {admin ? (
-                            <button className="absolute text-white hover:bg-black rounded-full" onClick={() => erasePost(post.id)}>
-                                {SVG.DELETE}
-                            </button>
-                        ) : null}
 
-                        <div className="w-9/12 border-gray-400 shadow-md bg-white">
 
-                            <p className="p-4 pt-2 pb-1 w-full">
-                                <span className="mr-1 font-bold">{post.users.firstname + ' ' + post.users.lastname}</span>
-                                <span className=" italic text-xl">{post.title}</span>
-                            </p>
-                            <p className="p-4 py-0 font-bold mb-2">{post.likes.length} likes</p>
-                            <button className="rounded-md bg-red-300 p-2" onClick={incrementCounter}>+1</button>
-                            <p>{like}</p>
-                            {post.comments.map((comment) => (
-                                <div key={comment.id} className="p-4 pt-1 pb-4 w-full text-left relative">
-                                    <p className="mb-1 " >
-                                        <a className="mr-1 font-bold">{comment.users.firstname}</a>
-                                        <span>{comment.message}</span>
-                                    </p>
-                                    <button className="absolute top-0 right-0 text-black hover:bg-red-500 rounded-full" onClick={() => eraseComment(comment.id)}>
-                                        {SVG.DELETE}
-                                    </button>
-                                </div>
+        <div className="flex flex-col items-center text-left mb-16 relative rounded-md">
+            <img src={post.imageUrl} alt={post.title} className="w-9/12 rounded-t-md" />
+            {admin ? (
+                <button className="absolute text-white hover:bg-black rounded-full" onClick={() => erasePost(post.id)}>
+                    {SVG.DELETE}
+                </button>
+            ) : null}
 
-                            ))}
-                            <div className="border-t border-gray-300">
-                                <form className="flex justify-between pl-0 pr-5"
-                                    method="POST">
+            <div className="w-9/12 border-gray-400 shadow-md bg-white">
 
-                                    <input
-                                        aria-label="Add a comment"
-                                        autoComplete="off"
-                                        className="text-sm text-gray-500 w-full mr-3 py-5 px-4"
-                                        type="text"
-                                        name="add-comment"
-                                        placeholder="Add a comment..."
-                                        onChange={(e) => setMessage(e.target.value)}
-                                        onFocus={() => setPostId(post.id)}
-                                    />
-                                    <button
-                                        className={`text-sm font-bold text-primary`}
-                                        type="button"
-                                        onClick={submitComment}
-                                    >
-                                        Post
-                                    </button>
-                                </form>
-                                <button onClick={() => test(post.id)}>test</button>
-                                {isLiked ? (
-                                    <p>yes</p>
-                                ) : (
-                                    <p>no</p>
-                                )}
-
-                            </div>
-                        </div>
+                <p className="p-4 pt-2 pb-1 w-full">
+                    <span className="mr-1 font-bold">{post.users.firstname + ' ' + post.users.lastname}</span>
+                    <span className=" italic text-xl">{post.title}</span>
+                </p>
+                <p className="p-4 py-0 font-bold mb-2">{post.likes.length} likes</p>
+                <button className="rounded-md bg-red-300 p-2" onClick={incrementCounter}>+1</button>
+                <p>{like}</p>
+                {post.comments.map((comment) => (
+                    <div key={comment.id} className="p-4 pt-1 pb-4 w-full text-left relative">
+                        <p className="mb-1 " >
+                            <a className="mr-1 font-bold">{comment.users.firstname}</a>
+                            <span>{comment.message}</span>
+                        </p>
+                        <button className="absolute top-0 right-0 text-black hover:bg-red-500 rounded-full" onClick={() => eraseComment(comment.id)}>
+                            {SVG.DELETE}
+                        </button>
                     </div>
-                ))
-            )
-            }
-        </Fragment>
+
+                ))}
+                <div className="border-t border-gray-300">
+                    <form className="flex justify-between pl-0 pr-5"
+                        method="POST">
+
+                        <input
+                            aria-label="Add a comment"
+                            autoComplete="off"
+                            className="text-sm text-gray-500 w-full mr-3 py-5 px-4"
+                            type="text"
+                            name="add-comment"
+                            placeholder="Add a comment..."
+                            onChange={(e) => setMessage(e.target.value)}
+                            onFocus={() => setPostId(post.id)}
+                        />
+                        <button
+                            className={`text-sm font-bold text-primary`}
+                            type="button"
+                            onClick={submitComment}
+                        >
+                            Post
+                        </button>
+                    </form>
+                    <button onClick={() => test(post.id)}>test</button>
+                    <svg
+                        onClick={() => test(post.id)}
+                        onKeyDown={(event) => {
+                            if (event.key === 'Enter') {
+                                () => test(post.id);
+                            }
+                        }} // accessibility
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        tabIndex={0}
+                        className={`w-8 mr-4 select-none cursor-pointer focus:outline-none ${isLiked ? 'fill-current text-red-500' : 'text-gray-700'
+                            }`}
+                    >
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                        />
+                    </svg>
+
+                </div>
+            </div>
+        </div>
+
+
+
     )
 }
 
 /* onClick={(e) => updateLike(e, post.id)
 {post.comments.map((comment) => (
     -> <Comment prop = comment> </Comment>
+
+{console.log(toggleLiked)}
+    {toggleLiked ? (
+                                    <p>yes</p>
+
+                                ) : (
+                                    <p>no</p>
+                                )}
+
+
+                                {liked ? (
+                                    <p>yes</p>
+
+                                ) : (
+                                    <p>no</p>
+                                )}
     */

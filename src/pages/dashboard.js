@@ -1,30 +1,25 @@
 /* eslint-disable */
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, Fragment } from "react";
 import Sidebar from '../components/Sidebar';
 import PostService from "../services/PostService";
 import UsersServices from "../services/UsersServices";
 import UserContext from '../context/userContext';
 import PostContext from '../context/postContext';
+import UserInfoContext from '../context/userInfoContext';
 import Post from "../components/Post";
 
 
 export default function Dashboard() {
-    /* const [posts, setPost] = useState([]);
-    const [comments, setComments] = useState([]); */
 
     const [file, setFile] = useState({ file: "" })
     const { posts, setPost } = useContext(PostContext);
     const [title, setTitle] = useState({ title: "" })
     const [fileName, setFileName] = useState()
     const { userToken, setUserToken } = useContext(UserContext);
-    //const { posts, setPost } = useContext(PostContext)
+    const { user, setUser } = useContext(UserInfoContext);
+    const [refreshToSee, setRefreshToSee] = useState(false)
 
-    const wait = function (duration = 1000) {
-        return new Promise((resolve) => {
-            window.setTimeout(resolve, duration)
-        })
-    }
-
+    //console.log("post", user)
     const handleFile = (e) => {
         const file = e.target.files[0];
 
@@ -46,15 +41,29 @@ export default function Dashboard() {
         formData.append('title', title);
         await PostService.create(userToken, formData)
             .then(response => {
-                console.log('File Uploaded', response)
+                console.log('File Uploaded', response.data)
                 setFileName();
                 setTitle();
-                /* let newPosts = response.data;
-                let oldPosts = [...posts]
-                console.log("new create", response.data);
-                oldPosts.push(newPosts);
-                setPost(oldPosts);
- */
+                let newPosts = response.data;
+                if (posts === undefined) {
+                    console.log("posts undefined")
+                    setRefreshToSee(true)
+                } else {
+
+                    let postsArray = posts;
+                    postsArray.unshift(newPosts);
+                    let lastPost = postsArray[0];
+                    let likes = {
+                        likes: [],
+                        comments: [],
+                    };
+                    let newPostArray = Object.assign(lastPost, user);
+                    let newPostLikes = Object.assign(newPostArray, likes);
+
+                    let oldPosts = [...posts];
+                    setPost(oldPosts);
+                }
+
             }
             )
             .catch(err => {
@@ -63,8 +72,21 @@ export default function Dashboard() {
             );
     };
 
-    useEffect(() => {
+    useEffect(async () => {
         document.title = 'Groupomania';
+
+        await UsersServices.getUser(userToken)
+            .then(response => {
+                let userData = {
+                    "users": response.data
+                }
+                //console.log(userData.users.id)
+                setUser(userData)
+            })
+            .catch(e => {
+                console.log(e)
+            });
+
     }, []);
 
     useEffect(() => {
@@ -76,7 +98,6 @@ export default function Dashboard() {
                     let postNotRecent = response.data;
                     const postRecent = postNotRecent.reverse();
                     setPost(postRecent)
-
                 }
 
             })
@@ -110,9 +131,19 @@ export default function Dashboard() {
                         className='bg-red-300 mt-4 text-white font-bold'
                     > Poster !</button>
                 </form>
-                {/* <button onClick={() => uploadFile()}>Charge</button> */}
 
-                <Post />
+                {!posts || posts.length === 0 ? (
+                    refreshToSee ? (
+                        <div className="text-bold"> Actualise pour voir ton post {`;)`} </div>
+                    ) : (
+                        <div className="text-bold bg-red-400 text-white p-2">Pas de post encore {`:(`} </div>
+                    )
+                ) : (
+                    posts.map((post) => (
+                        <Post post={post} key={post.id} />
+                    ))
+                )
+                }
 
             </div>
         </main>

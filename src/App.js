@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import * as ROUTES from './constants/routes';
 import UserContext from './context/userContext';
 import PostContext from './context/postContext';
+import UserInfoContext from './context/userInfoContext';
 
 const Login = lazy(() => import('./pages/login'));
 const SignUp = lazy(() => import('./pages/signup'));
@@ -14,6 +15,7 @@ const Profile = lazy(() => import('./pages/profile'));
 function App() {
 
   const [userToken, setUserToken] = useState();
+  const [user, setUser] = useState();
   const [posts, setPost] = useState();
 
   React.useEffect(() => {
@@ -25,21 +27,23 @@ function App() {
   return (
     <div >
       <UserContext.Provider value={{ userToken, setUserToken }}>
-        <PostContext.Provider value={{ posts, setPost }}>
-          <Router >
-            <Suspense fallback={<p>Loading...</p>}>
-              <Switch>
-                <Route path={ROUTES.LOGIN} component={Login} />
-                <Route path={ROUTES.SIGNUP} component={SignUp} />
-                <Route path={ROUTES.PROFILE} component={Profile} />
+        <UserInfoContext.Provider value={{ user, setUser }}>
+          <PostContext.Provider value={{ posts, setPost }}>
+            <Router >
+              <Suspense fallback={<p>Loading...</p>}>
+                <Switch>
+                  <Route path={ROUTES.LOGIN} component={Login} />
+                  <Route path={ROUTES.SIGNUP} component={SignUp} />
+                  <Route path={ROUTES.PROFILE} component={Profile} />
 
-                <Route path={ROUTES.DASHBOARD} exact component={Dashboard} />
+                  <Route path={ROUTES.DASHBOARD} exact component={Dashboard} />
 
-                <Route path={ROUTES.LOST} component={Lost} />
-              </Switch>
-            </Suspense>
-          </Router>
-        </PostContext.Provider>
+                  <Route path={ROUTES.LOST} component={Lost} />
+                </Switch>
+              </Suspense>
+            </Router>
+          </PostContext.Provider>
+        </UserInfoContext.Provider>
       </UserContext.Provider>
     </div>
   );

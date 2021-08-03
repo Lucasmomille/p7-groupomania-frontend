@@ -5,7 +5,7 @@ import Sidebar from '../components/Sidebar';
 import UsersServices from "../services/UsersServices";
 import UserContext from '../context/userContext';
 import PostContext from '../context/postContext';
-
+import UserInfoContext from '../context/userInfoContext';
 import * as ROUTES from '../constants/routes';
 
 export default function Profile() {
@@ -13,21 +13,19 @@ export default function Profile() {
     const history = useHistory();
     const { userToken, setUserToken } = useContext(UserContext);
     const { posts, setPost } = useContext(PostContext);
-
+    const { user, setUser } = useContext(UserInfoContext);
     const [firstname, setFirstname] = useState()
     const [lastname, setLastname] = useState()
     const [changeName, setChangeName] = useState()
     const [changeLastname, setChangeLastname] = useState()
-    const [userId, setUserId] = useState()
 
-    console.log("changename", changeName)
+
     const onSubmit = async e => {
         e.preventDefault();
         var info = {
             firstname: changeName,
             lastname: changeLastname,
         };
-        console.log(info)
         changeUser(userToken, info);
         setFirstname(changeName);
     }
@@ -63,12 +61,10 @@ export default function Profile() {
 
         UsersServices.getUser(userToken)
             .then(response => {
-                console.log(response.data.id);
                 setFirstname(response.data.firstname);
                 setLastname(response.data.lastname);
                 setChangeName(response.data.firstname);
                 setChangeLastname(response.data.lastname);
-                setUserId(response.data.id);
             })
             .catch(e => {
                 console.log(e)
@@ -88,7 +84,7 @@ export default function Profile() {
                     <input type="text" className="w-6/12" onChange={(e) => setChangeLastname(e.target.value)} />
                     <button className="w-min rounded-full bg-red-200 p-2" onClick={(e) => onSubmit(e)}> Modifier</button>
                 </form>
-                <button className="w-min rounded-full bg-primary text-white p-4 self-center mt-12 hover:opacity-80" onClick={(e) => deleteUser(userToken, userId, e)}>Supprimer le compte</button>
+                <button className="w-min rounded-full bg-primary text-white p-4 self-center mt-12 hover:opacity-80" onClick={(e) => deleteUser(userToken, user.users.id, e)}>Supprimer le compte</button>
             </div>
 
         </main>

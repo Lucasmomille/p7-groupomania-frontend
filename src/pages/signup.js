@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { useState, useContext, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { useForm } from "react-hook-form";
 import { Link, useHistory, useParams } from "react-router-dom";
@@ -21,22 +21,6 @@ export default function SignUp() {
     const password = useRef({});
     password.current = watch("password", "");
 
-    /*  const handleInputChange = event => {
-         const { name, value } = event.target;
-         console.log(event)
-         setSignUp({ ...signUp, [name]: value });
-     }; */
-
-    const initialSignUpState = {
-        id: null,
-        email: "",
-        lastname: "",
-        firstname: "",
-        password: "",
-        password_confirmation: ""
-    };
-    const [signUp, setSignUp] = useState(initialSignUpState);
-
     const onSubmit = async data => {
         console.log('onsubmit')
         var info = {
@@ -49,7 +33,7 @@ export default function SignUp() {
         await wait(2000)
         history.push(ROUTES.LOGIN);
     }
-    /* eslint-disable */
+
     const saveSignUp = (info) => {
         SignService.create(info)
             .then(response => {

@@ -5,6 +5,7 @@ import * as ROUTES from './constants/routes';
 import UserContext from './context/userContext';
 import PostContext from './context/postContext';
 import UserInfoContext from './context/userInfoContext';
+import ProtectedRoute from './helpers/protected.route';
 
 const Login = lazy(() => import('./pages/login'));
 const SignUp = lazy(() => import('./pages/signup'));
@@ -35,9 +36,9 @@ function App() {
                   <Route path={ROUTES.LOGIN} component={Login} />
                   <Route path={ROUTES.SIGNUP} component={SignUp} />
                   <Route path={ROUTES.PROFILE} component={Profile} />
-
-                  <Route path={ROUTES.DASHBOARD} exact component={Dashboard} />
-
+                  <ProtectedRoute user={userToken} path={ROUTES.DASHBOARD} exact>
+                    <Route path={ROUTES.DASHBOARD} exact component={Dashboard} />
+                  </ProtectedRoute>
                   <Route path={ROUTES.LOST} component={Lost} />
                 </Switch>
               </Suspense>

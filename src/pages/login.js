@@ -33,13 +33,10 @@ export default function Login() {
     }
 
     const saveLogin = async (info) => {
-        console.log("saveLogin")
         // sessionStorage.clear;
         await SignService.signin(info)
             .then(response => {
-                //console.log(response.data.id);
                 sessionStorage.setItem("infoUser", JSON.stringify(response.data.accessToken));
-                sessionStorage.setItem("nameUser", JSON.stringify(response.data.firstname));
                 sessionStorage.setItem("idUser", JSON.stringify(response.data.id));
                 setUserToken(JSON.parse(sessionStorage.getItem("infoUser")));
                 setIsError(false);
@@ -113,7 +110,7 @@ export default function Login() {
                         Envoyer
                     </button>
 
-                    <p className="text-sm">
+                    <p className="text-sm mt-1">
                         Tu n'as pas de compte ?{` `}
                         <Link to={ROUTES.SIGNUP} className="font-bold text-primary">
                             Sign Up !

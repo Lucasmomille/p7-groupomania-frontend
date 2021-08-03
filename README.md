@@ -6,10 +6,19 @@ run npm install and install [TailwindCSS](https://tailwindcss.com/docs/guides/cr
 No need to create tailwind.config.js etc.
 
 
-
 ## Create an admin profile
 
 You need to use Postman "/auth/signup"
+
+In the body paste this :
+{
+    "firstname": "FIRSTNAME_OF_YOUR_ADMIN",
+    "lastname": "lASTNAME_OF_YOUR_ADMIN"",
+    "email": "EMAIL_OF_YOUR_ADMIN"",
+    "password": "PASSWORD_OF_YOUR_ADMIN"",
+    "roles":["admin"]
+}
+Note that your password must contains uppercase, lowercase, symbole and number
 
 ### `npm start`
 

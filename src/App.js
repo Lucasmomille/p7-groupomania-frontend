@@ -33,13 +33,13 @@ function App() {
             <Router >
               <Suspense fallback={<p>Loading...</p>}>
                 <Switch>
-                  <Route path={ROUTES.LOGIN} component={Login} />
-                  <Route path={ROUTES.SIGNUP} component={SignUp} />
-                  <Route path={ROUTES.PROFILE} component={Profile} />
+                  <Route exact path={ROUTES.LOGIN} component={Login} />
+                  <Route exact path={ROUTES.SIGNUP} component={SignUp} />
+                  <Route exact path={ROUTES.PROFILE} component={Profile} />
                   <ProtectedRoute user={userToken} path={ROUTES.DASHBOARD} exact>
-                    <Route path={ROUTES.DASHBOARD} exact component={Dashboard} />
+                    <Dashboard />
                   </ProtectedRoute>
-                  <Route path={ROUTES.LOST} component={Lost} />
+                  <Route component={Lost} />
                 </Switch>
               </Suspense>
             </Router>

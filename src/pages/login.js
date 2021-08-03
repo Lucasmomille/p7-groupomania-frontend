@@ -28,8 +28,7 @@ export default function Login() {
         };
 
         saveLogin(info);
-        await wait(2000)
-        history.push(ROUTES.DASHBOARD);
+
 
     }
 
@@ -44,7 +43,8 @@ export default function Login() {
                 sessionStorage.setItem("idUser", JSON.stringify(response.data.id));
                 setUserToken(JSON.parse(sessionStorage.getItem("infoUser")));
                 setIsError(false);
-
+                wait(2000)
+                history.push(ROUTES.DASHBOARD);
             })
             .catch(e => {
                 if (e) {

@@ -28,12 +28,6 @@ export default function Dashboard() {
         setFile({ file: file })
     }
 
-    const uploadFile = async () => {
-        console.log(file.file.name);
-        console.log(title);
-    }
-
-
     const onSubmit = async e => {
         e.preventDefault();
         const formData = new FormData();

@@ -18,84 +18,54 @@ export default function Post(props) {
     const [message, setMessage] = useState();
     const [postId, setPostId] = useState();
     const { userToken, setUserToken } = useContext(UserContext);
+    const { user, setUser } = useContext(UserInfoContext);
     const [admin, setAdmin] = useState(false)
     const [like, setLike] = useState(0);
-    const { user, setUser } = useContext(UserInfoContext);
     const [isLiked, setIsLiked] = useState(false);
-
-
-    const [toggleLiked, setToggleLiked] = useState(0);
-    // const { isUserLiked } = isLiked();
-    const incrementCounter = () => {
-        if (like === 0) {
-            /// and if user.id / req.id != like userId
-            setLike(like + 1)
-        } else {
-            setLike(0)
-        }
-    };
-
-    const updateLike = async (e, postid) => {
-        e.preventDefault();
-
-        let data = {
-            "postId": postid,
-            //"userId": user.users.id
-        };
-        // if user.users.id === posts.likes.userId
-        // delete like
-
-        await PostService.createLike(userToken, data)
-            .then(response => {
-                console.log("like update ", response)
-                //console.log(post);
-
-            })
-            .catch(e => {
-                console.log(e)
-            })
-    }
 
     const test = (id) => {
 
         let likes = post.likes;
         //let userId = JSON.parse(sessionStorage.getItem("idUser"))
         let index = likes.findIndex(elt => elt.userId === user.users.id);
-        if (index > -1) {
-            console.log("is liked")
-            setIsLiked(false)
-        }
 
-        for (const post of posts) {
-
-
-            if (post.id === id) {
-                console.log("ok");
-                //console.log(post.likes)
-                let likes = post.likes;
-                let data = {
-                    postId: post.id
-                }
-                //console.log(likes.length)
-                let index = likes.findIndex(elt => elt.userId === user.users.id);
-                console.log(index)
-                if (index === -1) {
-                    console.log("empty or not liked")
+        if (post.id === id) {
+            //console.log(post.likes)
+            let likes = post.likes;
+            let data = {
+                postId: post.id
+            }
+            if (index === -1) {
+                console.log("empty or not liked")
+                if (!isLiked) {
                     PostService.createLike(userToken, data)
                         .then(response => {
-                            console.log(response);
+                            let newLike = response.data;
+                            setIsLiked(true);
+                            //Refresh posts with likes array 
+                            likes.unshift(newLike);
+                            let lastLike = likes[likes.length - 1];
+                            let newLikesArray = Object.assign(lastLike, user);
+                            let newPosts = [...posts];
+                            setPost(newPosts);
+
                         })
                         .catch(err => {
                             console.log(err);
                         }
                         )
-                } else {
-                    console.log("is already liked")
-                    const myLike = likes[index].id;
-                    console.log(myLike);
+                }
+
+            } else {
+                console.log("is already liked")
+                const myLike = likes[index].id;
+                if (isLiked) {
                     PostService.deleteLike(userToken, myLike, post.id)
                         .then(response => {
-                            console.log(response);
+                            likes.splice(index, 1);
+                            let newPosts = [...posts];
+                            setPost(newPosts);
+                            setIsLiked(false)
                         })
                         .catch(err => {
                             console.log(err);
@@ -105,7 +75,6 @@ export default function Post(props) {
 
             }
         }
-
     }
 
     const submitComment = async (e, id) => {
@@ -137,6 +106,24 @@ export default function Post(props) {
             )
     }
 
+    const eraseComment = (commentId) => {
+        CommentService.deleteComment(userToken, commentId)
+            .then(response => {
+                console.log("deleted", response)
+                let commentsArray = post.comments;
+                console.log("comment", commentsArray)
+                let index = commentsArray.findIndex(elt => elt.userId === user.users.id);
+                console.log(index)
+                commentsArray.splice(index, 1);
+                let newPosts = [...posts];
+                setPost(newPosts);
+            })
+            .catch(e => {
+                console.log(e)
+            })
+    }
+
+
     const erasePost = (postId) => {
         //console.log(posts[0].id);
         PostService.deletePost(userToken, postId)
@@ -154,17 +141,6 @@ export default function Post(props) {
             })
     }
 
-    const eraseComment = (commentId) => {
-        CommentService.deleteComment(userToken, commentId)
-            .then(response => {
-                console.log("deleted", response)
-            })
-            .catch(e => {
-                console.log(e)
-            })
-    }
-
-
 
     useEffect(async () => {
         await UsersServices.isAdmin(userToken)
@@ -180,6 +156,17 @@ export default function Post(props) {
         //console.log("post", posts)
 
     }, []);
+
+    useEffect(() => {
+        let likes = post.likes;
+        let userId = JSON.parse(sessionStorage.getItem("idUser"))
+        let index = likes.findIndex(elt => elt.userId === userId);
+        if (index > -1) {
+            console.log("is liked")
+            setIsLiked(true)
+        }
+
+    }, [])
 
 
     return (
@@ -200,8 +187,6 @@ export default function Post(props) {
                     <span className=" italic text-xl">{post.title}</span>
                 </p>
                 <p className="p-4 py-0 font-bold mb-2">{post.likes.length} likes</p>
-                <button className="rounded-md bg-red-300 p-2" onClick={incrementCounter}>+1</button>
-                <p>{like}</p>
                 {post.comments.map((comment) => (
                     <div key={comment.id} className="p-4 pt-1 pb-4 w-full text-left relative">
                         <p className="mb-1 " >

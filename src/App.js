@@ -19,10 +19,12 @@ function App() {
   const [user, setUser] = useState();
   const [posts, setPost] = useState();
 
+  const info = JSON.parse(sessionStorage.getItem("infoUser")) || null;
+
   React.useEffect(() => {
-    const info = JSON.parse(sessionStorage.getItem("infoUser")) || null;
     //console.log(info)
     setUserToken(info)
+
   }, [])
 
   return (
@@ -36,7 +38,7 @@ function App() {
                   <Route exact path={ROUTES.LOGIN} component={Login} />
                   <Route exact path={ROUTES.SIGNUP} component={SignUp} />
                   <Route exact path={ROUTES.PROFILE} component={Profile} />
-                  <ProtectedRoute user={userToken} path={ROUTES.DASHBOARD} exact>
+                  <ProtectedRoute user={info} path={ROUTES.DASHBOARD} exact>
                     <Dashboard />
                   </ProtectedRoute>
                   <Route component={Lost} />

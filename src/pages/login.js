@@ -6,7 +6,7 @@ import { Link, useHistory } from "react-router-dom";
 import SignService from "../services/SignService";
 import * as ROUTES from '../constants/routes';
 //import UserContext from '../context/user';
-import * as SVG from '../constants/svg';
+//import * as SVG from '../constants/svg';
 
 const wait = function (duration = 1000) {
     return new Promise((resolve) => {
@@ -64,7 +64,7 @@ export default function Login() {
 
     return (
         <div className="container flex lg:flex-row flex-col mx-auto w-11/12 lg:w-9/12 justify-between items-center min-h-screen">
-            {SVG.LOGOCOLOR}
+            <img src="/images/icon-above-font.png" alt="logo groupomania" className="w-7/12" />
             <form onSubmit={handleSubmit(onSubmit)} method="submit" className="w-11/12 lg:w-5/12 mx-auto flex flex-col space-y-4 items-center bg-red-100 p-4 border border-blue-600 mb-4 rounded">
                 <h2 className="uppercase text-primary my-5">Sign in to website</h2>
                 <div className="flex flex-col text-left">

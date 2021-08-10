@@ -40,7 +40,6 @@ export default function Dashboard() {
                 setTitle();
                 let newPosts = response.data;
                 if (posts === undefined) {
-                    console.log("posts undefined")
                     setRefreshToSee(true)
                 } else {
 
@@ -53,7 +52,6 @@ export default function Dashboard() {
                     };
                     let newPostArray = Object.assign(lastPost, user);
                     let newPostLikes = Object.assign(newPostArray, likes);
-
                     let oldPosts = [...posts];
                     setPost(oldPosts);
                 }
@@ -68,13 +66,11 @@ export default function Dashboard() {
 
     useEffect(async () => {
         document.title = 'Groupomania';
-
         await UsersServices.getUser(userToken)
             .then(response => {
                 let userData = {
                     "users": response.data
                 }
-                //console.log(userData.users.id)
                 setUser(userData)
             })
             .catch(e => {

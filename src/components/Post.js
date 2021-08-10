@@ -116,11 +116,9 @@ export default function Post(props) {
 
 
     const erasePost = (postId) => {
-        //console.log(posts[0].id);
         PostService.deletePost(userToken, postId)
             .then(response => {
                 console.log("post deleted " + response)
-                //console.log(post);
                 let newPosts = [...posts];
                 console.log("new", newPosts)
                 let index = newPosts.findIndex(elt => elt.id === postId);

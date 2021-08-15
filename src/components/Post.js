@@ -2,19 +2,17 @@
 import React, { useState, useContext, useEffect } from "react";
 import PostService from "../services/PostService";
 import UsersServices from "../services/UsersServices";
-import CommentServices from "../services/CommentService";
 import PostContext from '../context/postContext';
 import UserContext from '../context/userContext';
 import UserInfoContext from '../context/userInfoContext';
 import Comment from "../components/Comment";
+import AddComment from "../components/AddComment";
 import * as SVG from "../constants/svg";
 
 export default function Post(props) {
     const post = props.post;
 
     const { posts, setPost } = useContext(PostContext);
-    const [message, setMessage] = useState();
-    const [postId, setPostId] = useState();
     const { userToken } = useContext(UserContext);
     const { user, setUser } = useContext(UserInfoContext);
     const [admin, setAdmin] = useState(false)
@@ -72,33 +70,6 @@ export default function Post(props) {
         }
     }
 
-    const submitComment = async (e, id) => {
-        e.preventDefault();
-        let info = {
-            "message": message,
-            "postId": postId,
-        }
-        console.log("before")
-        await CommentServices.create(userToken, info)
-            .then(response => {
-                let newComment = response.data;
-                let commentsArray;
-                for (const post of posts) {
-                    if (post.id === postId) {
-                        commentsArray = post.comments;
-                        commentsArray.push(newComment);
-                        let lastComment = commentsArray[commentsArray.length - 1];
-                        let newCommentArray = Object.assign(lastComment, user);
-                    }
-                }
-                let newPosts = [...posts];
-                setPost(newPosts);
-            })
-            .catch(err => {
-                console.log(err);
-            }
-            )
-    }
 
     const erasePost = (postId) => {
         PostService.deletePost(userToken, postId)
@@ -181,34 +152,7 @@ export default function Post(props) {
                 {post.comments.map((comment) => (
                     <Comment comment={comment} post={post} key={comment.id} />
                 ))}
-                <div className="border-t border-gray-300">
-                    <form className="flex justify-between pl-0 pr-5"
-                        method="POST"
-                    >
-                        <input
-                            aria-label="Ajouter un commentaire"
-                            autoComplete="off"
-                            className="text-sm text-gray-500 w-full mr-3 py-5 px-4"
-                            type="text"
-                            name="add-comment"
-                            placeholder="Ajouter un commentaire..."
-                            onChange={(e) => setMessage(e.target.value)}
-                            onFocus={() => setPostId(post.id)}
-                        />
-                        <button
-                            className={`text-sm font-bold text-primary`}
-                            type="button"
-                            onKeyDown={(event) => {
-                                if (event.key === 'Enter') {
-                                    (event) => message.length >= 1 ? submitComment(event) : event.preventDefault;
-                                }
-                            }}
-                            onClick={(event) => message.length >= 1 ? submitComment(event) : event.preventDefault}
-                        >
-                            Post
-                        </button>
-                    </form>
-                </div>
+                <AddComment post={post}></AddComment>
             </div>
         </div>
 

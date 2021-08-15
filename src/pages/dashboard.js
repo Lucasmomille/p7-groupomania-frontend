@@ -101,7 +101,9 @@ export default function Dashboard() {
             <Sidebar></Sidebar>
             <div className="bg-gray-50 mx-auto px-12 lg:text-left text-center lg:w-7/12 w-10/12 mt-16 pt-10 flex flex-col rounded-md">
 
-                <form className="flex flex-col mx-auto space-y-6 bg-red-100 w-9/12 mb-12 p-4 rounded-md" onSubmit={onSubmit}>
+                <form
+                    className="flex flex-col mx-auto space-y-6 bg-red-100 lg:w-9/12 w-full mb-12 p-4 rounded-md"
+                    onSubmit={onSubmit}>
                     <label>Titre du post</label>
                     <input type="text" id="titlePost" onChange={(e) => setTitle(e.target.value)}
                         className="p-2 mx-auto w-11/12 rounded-md" />
@@ -112,7 +114,7 @@ export default function Dashboard() {
                         <input type="file" capture="user" accept="image/^"
                             className="file"
                             id="file" onChange={(e) => handleFile(e)} />
-                        <p>{fileName}</p>
+                        <p className="mt-1 w-full break-words inline-block">{fileName}</p>
                     </div>
 
                     <button

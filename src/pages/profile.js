@@ -12,8 +12,8 @@ export default function Profile() {
 
     const history = useHistory();
     const { userToken, setUserToken } = useContext(UserContext);
-    const { posts, setPost } = useContext(PostContext);
-    const { user, setUser } = useContext(UserInfoContext);
+    const { setPost } = useContext(PostContext);
+    const { user } = useContext(UserInfoContext);
     const [firstname, setFirstname] = useState()
     const [lastname, setLastname] = useState()
     const [changeName, setChangeName] = useState()
@@ -74,17 +74,43 @@ export default function Profile() {
     return (
         <main className="w-full flex">
             <Sidebar></Sidebar>
-            <div className="w-8/12 mx-auto p-12 flex flex-col">
+            <div className="lg:w-8/12 w-10/12 mx-auto p-12 flex flex-col">
                 <p className="text-2xl mb-12">Bonjour {firstname} !</p>
                 <form className="bg-red-100 p-12 flex flex-col space-y-6">
 
                     <p>Prénom:</p>
-                    <input type="text" className="w-6/12" onChange={(e) => setChangeName(e.target.value)} />
+                    <input
+                        aria-label="Ajouter votre prénom"
+                        type="text"
+                        className="lg:w-5/12 w-full"
+                        onChange={(e) => setChangeName(e.target.value)} />
                     <p>Nom:</p>
-                    <input type="text" className="w-6/12" onChange={(e) => setChangeLastname(e.target.value)} />
-                    <button className="w-min rounded-full bg-red-200 p-2" onClick={(e) => onSubmit(e)}> Modifier</button>
+                    <input
+                        aria-label="Ajouter votre nom"
+                        type="text"
+                        className="lg:w-5/12 w-full"
+                        onChange={(e) => setChangeLastname(e.target.value)} />
+                    <button
+                        className="w-min rounded-full lg:self-start self-center bg-red-200 p-2"
+                        onClick={(e) => onSubmit(e)}
+                        onKeyDown={(event) => {
+                            if (event.key === 'Enter') {
+                                onSubmit(event);
+                            }
+                        }}>
+                        Modifier
+                    </button>
                 </form>
-                <button className="w-min rounded-full bg-primary text-white p-4 self-center mt-12 hover:opacity-80" onClick={(e) => deleteUser(userToken, user.users.id, e)}>Supprimer le compte</button>
+                <button
+                    className="lg:w-min rounded-full bg-primary text-white p-4 self-center mt-12 hover:opacity-80"
+                    onClick={(e) => deleteUser(userToken, user.users.id, e)}
+                    onKeyDown={(event) => {
+                        if (event.key === 'Enter') {
+                            deleteUser(userToken, user.users.id, event);
+                        }
+                    }}>
+                    Supprimer le compte
+                </button>
             </div>
 
         </main>

@@ -31,15 +31,15 @@ export default function Sidebar() {
 
                 <nav className={"space-y-6 flex flex-col mt-32 fixed"}>
                     <NavLink exact to={ROUTES.DASHBOARD}
-                        className=" h-16 w-16 flex items-center justify-center rounded-full" activeClassName="bg-red-300">
+                        className="lg:h-16 lg:w-16 h-12 w-12 flex items-center justify-center rounded-full" activeClassName="bg-red-300">
                         {SVG.HOME}
                     </NavLink>
                     <NavLink exact to={ROUTES.PROFILE}
-                        className="h-16 w-16 flex items-center justify-center rounded-full" activeClassName="bg-red-300">
+                        className="lg:h-16 lg:w-16 h-12 w-12 flex items-center justify-center rounded-full" activeClassName="bg-red-300">
                         {SVG.USER}
                     </NavLink>
                     <NavLink exact to={ROUTES.LOGIN} onClick={logOut}
-                        className="h-16 w-16 flex items-center justify-center rounded-full" activeClassName="bg-red-300">
+                        className="lg:h-16 lg:w-16 h-12 w-12 flex items-center justify-center rounded-full" activeClassName="bg-red-300">
                         {SVG.SIGNOUT}
                     </NavLink>
 

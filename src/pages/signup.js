@@ -59,6 +59,7 @@ export default function SignUp() {
                     <div className="flex flex-col text-left">
                         <label className="px-4" htmlFor="email" > Email <span>*</span> </label>
                         <input
+                            aria-label="Votre email"
                             type="email"
                             id="email"
                             placeholder="Votre adresse mail"
@@ -78,11 +79,12 @@ export default function SignUp() {
 
                     <div className="flex flex-col text-left">
                         <label className="px-4" htmlFor="firstname" > Prénom <span>*</span> </label>
-                        <input type="text"
+                        <input
+                            aria-label="Prénom"
+                            type="text"
                             id="firstname"
                             placeholder="Jane"
                             name="firstname"
-
                             className="text-gray-600  mt-2 p-4 focus:ring-2 focus:ring-blue-200"
                             {...register("firstname", {
                                 required: "prénom requis",
@@ -93,16 +95,15 @@ export default function SignUp() {
                     </div>
                     <div className="flex flex-col text-left">
                         <label className="px-4" htmlFor="lastname" > Nom <span>*</span> </label>
-                        <input type="text"
+                        <input
+                            aria-label="Votre nom"
+                            type="text"
                             id="lastname"
                             placeholder="Doe"
                             name="lastname"
-
                             className="text-gray-600  mt-2 p-4 focus:ring-2 focus:ring-blue-200"
                             {...register("lastname", {
                                 required: "nom requis",
-
-
                             })} />
                         {errors.lastname && <span className="text-red-500 text-xs mt-1 mb-2">{errors.lastname.message}</span>}
 
@@ -111,11 +112,11 @@ export default function SignUp() {
                         <label className="px-4" htmlFor="password" > Mot de passe <span>*</span> </label>
 
                         <input
+                            aria-label="Votre mot de passe"
                             type="password"
                             id="password"
                             placeholder="TeSt12*456"
                             name="password"
-
                             className="text-gray-600  mt-2 p-4 focus:ring-2 focus:ring-blue-200"
                             {...register("password", {
                                 required: "Mot de passe requis",
@@ -137,6 +138,7 @@ export default function SignUp() {
                         <label className="px-4" htmlFor="password_confirmation" > Mot de passe confirmation <span>*</span> </label>
 
                         <input
+                            aria-label="Votre mot de passe pour confirmation"
                             type="password"
                             id="password_confirmation"
                             placeholder="TeSt12*456"
@@ -160,7 +162,6 @@ export default function SignUp() {
                     </div>
 
                     <button
-
                         type="submit"
                         className="bg-primary text-white rounded px-8 h-8 font-bold">
                         Sign Up

@@ -154,27 +154,28 @@ export default function Post(props) {
 
     return (
         <div className="flex flex-col items-center text-left mb-16 relative rounded-md">
-            <img src={post.imageUrl} alt={post.title} className="w-9/12 rounded-t-md" />
+            <img src={post.imageUrl} alt={post.title} className="lg:w-9/12 w-11/12 rounded-t-md" />
             {admin ? (
                 <button className="absolute text-white hover:bg-black rounded-full" onClick={() => erasePost(post.id)}>
                     {SVG.DELETE}
                 </button>
             ) : null}
 
-            <div className="w-9/12 border-gray-400 shadow-md bg-white">
-                <p className="p-4 pt-2 pb-1 w-full">
+            <div className="lg:w-9/12 w-11/12 border-gray-400 shadow-md bg-white">
+                <p className="p-4 pt-2 pb-1 w-full md:text-base text-sm">
                     <span className="mr-1 font-bold">{post.users.firstname + ' ' + post.users.lastname}</span>
-                    <span className=" italic text-xl">{post.title}</span>
+                    <span className=" italic lg:text-xl">{post.title}</span>
                 </p>
-                <div className="flex mb-2">
+                <div className="flex mb-2 md:text-base text-sm items-center">
                     <p className="p-4 py-0 font-bold mb-2">{post.likes.length} likes</p>
                     <svg
+                        aria-label={`Cliquer ici pour ${isLiked ? "ne plus aimer" : "aimer"}`}
                         onClick={() => toggleLike(post.id)}
                         onKeyDown={(event) => {
                             if (event.key === 'Enter') {
                                 () => toggleLike(post.id);
                             }
-                        }} // accessibility
+                        }}
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
@@ -194,33 +195,42 @@ export default function Post(props) {
 
                 {post.comments.map((comment) => (
                     <div key={comment.id} className="p-4 pt-1 pb-4 w-full text-left relative">
-                        <p className="mb-1 " >
+                        <p className="mb-1 md:text-base text-sm" >
                             <a className="mr-1 font-bold">{comment.users.firstname}</a>
                             <span>{comment.message}</span>
                         </p>
-                        <button className="absolute top-0 right-0 text-black hover:bg-red-500 rounded-full" onClick={() => eraseComment(comment.id)}>
-                            {SVG.DELETE}
-                        </button>
+                        {admin ? (
+                            <button className="absolute top-0 right-0 text-black hover:bg-red-500 rounded-full" onClick={() => eraseComment(comment.id)}>
+                                {SVG.DELETE}
+                            </button>
+                        ) : null}
+
                     </div>
 
                 ))}
                 <div className="border-t border-gray-300">
                     <form className="flex justify-between pl-0 pr-5"
-                        method="POST">
+                        method="POST"
+                    >
                         <input
-                            aria-label="Add a comment"
+                            aria-label="Ajouter un commentaire"
                             autoComplete="off"
                             className="text-sm text-gray-500 w-full mr-3 py-5 px-4"
                             type="text"
                             name="add-comment"
-                            placeholder="Add a comment..."
+                            placeholder="Ajouter un commentaire..."
                             onChange={(e) => setMessage(e.target.value)}
                             onFocus={() => setPostId(post.id)}
                         />
                         <button
                             className={`text-sm font-bold text-primary`}
                             type="button"
-                            onClick={submitComment}
+                            onKeyDown={(event) => {
+                                if (event.key === 'Enter') {
+                                    (event) => message.length >= 1 ? submitComment(event) : event.preventDefault;
+                                }
+                            }}
+                            onClick={(event) => message.length >= 1 ? submitComment(event) : event.preventDefault}
                         >
                             Post
                         </button>

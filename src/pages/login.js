@@ -69,7 +69,10 @@ export default function Login() {
                 <h2 className="uppercase text-primary my-5">Sign in to website</h2>
                 <div className="flex flex-col text-left">
                     <label className="px-4" htmlFor="email" > Email <span>*</span> </label>
-                    <input type="email" id="email" placeholder="Votre adresse mail"
+                    <input
+                        aria-label="Votre email"
+                        type="email" id="email"
+                        placeholder="Votre adresse mail"
                         className="text-gray-600 border border-blue-600 rounded-xl mt-2 p-4 focus:ring-2 focus:ring-green-700"
                         {...register("email", {
                             required: "Email requis",
@@ -84,11 +87,12 @@ export default function Login() {
                 </div>
                 <div className="flex flex-col text-left">
                     <label className="px-4" htmlFor="password" > Mot de passe <span>*</span> </label>
-                    <input type="password"
+                    <input
+                        aria-label="Votre mot de passe"
+                        type="password"
                         id="password"
                         placeholder="TeSt12*456"
                         name="password"
-
                         className="text-gray-600 border border-blue-600 rounded-xl mt-2 p-4 focus:ring-2 focus:ring-green-700"
                         {...register("password", {
                             required: "mot de passe requis",

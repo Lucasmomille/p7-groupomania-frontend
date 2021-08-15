@@ -1,0 +1,16 @@
+/* eslint-disable */
+import React, { useState, useContext, useEffect, Fragment } from "react";
+import UsersServices from "../services/UsersServices";
+import CommentService from "../services/CommentService";
+import UserContext from '../context/userContext';
+import PostContext from '../context/postContext';
+import UserInfoContext from '../context/userInfoContext';
+import * as SVG from "../constants/svg";
+
+export default function AddComment(props) {
+
+    return (
+        <Fragment>
+        </Fragment>
+    )
+}

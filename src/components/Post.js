@@ -4,9 +4,9 @@ import PostService from "../services/PostService";
 import UsersServices from "../services/UsersServices";
 import CommentServices from "../services/CommentService";
 import PostContext from '../context/postContext';
-import CommentService from "../services/CommentService";
 import UserContext from '../context/userContext';
 import UserInfoContext from '../context/userInfoContext';
+import Comment from "../components/Comment";
 import * as SVG from "../constants/svg";
 
 export default function Post(props) {
@@ -15,7 +15,7 @@ export default function Post(props) {
     const { posts, setPost } = useContext(PostContext);
     const [message, setMessage] = useState();
     const [postId, setPostId] = useState();
-    const { userToken, setUserToken } = useContext(UserContext);
+    const { userToken } = useContext(UserContext);
     const { user, setUser } = useContext(UserInfoContext);
     const [admin, setAdmin] = useState(false)
     const [isLiked, setIsLiked] = useState(false);
@@ -100,21 +100,6 @@ export default function Post(props) {
             )
     }
 
-    const eraseComment = (commentId) => {
-        CommentService.deleteComment(userToken, commentId)
-            .then(response => {
-                let commentsArray = post.comments;
-                let index = commentsArray.findIndex(elt => elt.userId === user.users.id);
-                commentsArray.splice(index, 1);
-                let newPosts = [...posts];
-                setPost(newPosts);
-            })
-            .catch(e => {
-                console.log(e)
-            })
-    }
-
-
     const erasePost = (postId) => {
         PostService.deletePost(userToken, postId)
             .then(response => {
@@ -194,19 +179,7 @@ export default function Post(props) {
                 </div>
 
                 {post.comments.map((comment) => (
-                    <div key={comment.id} className="p-4 pt-1 pb-4 w-full text-left relative">
-                        <p className="mb-1 md:text-base text-sm" >
-                            <a className="mr-1 font-bold">{comment.users.firstname}</a>
-                            <span>{comment.message}</span>
-                        </p>
-                        {admin ? (
-                            <button className="absolute top-0 right-0 text-black hover:bg-red-500 rounded-full" onClick={() => eraseComment(comment.id)}>
-                                {SVG.DELETE}
-                            </button>
-                        ) : null}
-
-                    </div>
-
+                    <Comment comment={comment} post={post} key={comment.id} />
                 ))}
                 <div className="border-t border-gray-300">
                     <form className="flex justify-between pl-0 pr-5"

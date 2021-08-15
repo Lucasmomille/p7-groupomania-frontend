@@ -14,7 +14,7 @@ export default function Post(props) {
 
     const { posts, setPost } = useContext(PostContext);
     const { userToken } = useContext(UserContext);
-    const { user, setUser } = useContext(UserInfoContext);
+    const { user } = useContext(UserInfoContext);
     const [admin, setAdmin] = useState(false)
     const [isLiked, setIsLiked] = useState(false);
 
@@ -29,7 +29,6 @@ export default function Post(props) {
                 postId: post.id
             }
             if (index === -1) {
-                console.log("empty or not liked")
                 if (!isLiked) {
                     PostService.createLike(userToken, data)
                         .then(response => {
@@ -48,9 +47,7 @@ export default function Post(props) {
                         }
                         )
                 }
-
             } else {
-                console.log("is already liked")
                 const myLike = likes[index].id;
                 if (isLiked) {
                     PostService.deleteLike(userToken, myLike, post.id)
@@ -65,11 +62,9 @@ export default function Post(props) {
                         }
                         )
                 }
-
             }
         }
     }
-
 
     const erasePost = (postId) => {
         PostService.deletePost(userToken, postId)
@@ -85,7 +80,6 @@ export default function Post(props) {
                 console.log(e)
             })
     }
-
 
     useEffect(async () => {
         await UsersServices.isAdmin(userToken)
@@ -105,6 +99,7 @@ export default function Post(props) {
         if (index > -1) {
             setIsLiked(true)
         }
+        console.log(post)
     }, [])
 
 

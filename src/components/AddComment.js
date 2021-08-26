@@ -57,7 +57,7 @@ export default function AddComment(props) {
                     onFocus={() => setPostId(post.id)}
                 />
                 <button
-                    className={`text-sm font-bold text-primary`}
+                    className={`text-sm font-bold text-secondary`}
                     type="button"
                     onKeyDown={(event) => {
                         if (event.key === 'Enter') {

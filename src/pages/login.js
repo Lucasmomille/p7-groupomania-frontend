@@ -65,8 +65,8 @@ export default function Login() {
     return (
         <div className="container flex lg:flex-row flex-col mx-auto w-11/12 lg:w-9/12 justify-between items-center min-h-screen">
             <img src="/images/icon-above-font.png" alt="logo groupomania" className="w-7/12" />
-            <form onSubmit={handleSubmit(onSubmit)} method="submit" className="w-11/12 lg:w-5/12 mx-auto flex flex-col space-y-4 items-center bg-red-100 p-4 border border-blue-600 mb-4 rounded">
-                <h2 className="uppercase text-primary my-5">Sign in to website</h2>
+            <form onSubmit={handleSubmit(onSubmit)} method="submit" className="w-11/12 lg:w-5/12 mx-auto flex flex-col space-y-4 items-center bg-blue-100 p-4 border border-blue-600 mb-4 rounded">
+                <h2 className="uppercase text-secondary my-5">Sign in to website</h2>
                 <div className="flex flex-col text-left">
                     <label className="px-4" htmlFor="email" > Email <span>*</span> </label>
                     <input
@@ -110,13 +110,13 @@ export default function Login() {
 
                     <button
                         type="submit"
-                        className="bg-primary mx-auto text-white hover:bg-transparent hover:text-primary rounded font-bold px-8 py-2">
+                        className="bg-secondary mx-auto text-white hover:bg-transparent hover:text-secondary rounded font-bold px-8 py-2">
                         Envoyer
                     </button>
 
                     <p className="text-sm mt-1">
                         Tu n'as pas de compte ?{` `}
-                        <Link to={ROUTES.SIGNUP} className="font-bold text-primary">
+                        <Link to={ROUTES.SIGNUP} className="font-bold text-secondary">
                             Sign Up !
                         </Link>
                     </p>

@@ -99,7 +99,6 @@ export default function Post(props) {
         if (index > -1) {
             setIsLiked(true)
         }
-        console.log(post)
     }, [])
 
 

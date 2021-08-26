@@ -55,7 +55,7 @@ export default function SignUp() {
 
             <div className="flex flex-col lg:w-3/5 w-4/5 mx-auto">
 
-                <form onSubmit={handleSubmit(onSubmit)} method="submit" className="flex flex-col items-center bg-white p-4 border border-primary mb-4 rounded">
+                <form onSubmit={handleSubmit(onSubmit)} method="submit" className="flex flex-col items-center bg-white p-4 border border-secondary mb-4 rounded">
                     <div className="flex flex-col text-left">
                         <label className="px-4" htmlFor="email" > Email <span>*</span> </label>
                         <input
@@ -163,15 +163,15 @@ export default function SignUp() {
 
                     <button
                         type="submit"
-                        className="bg-primary text-white rounded px-8 h-8 font-bold">
+                        className="bg-secondary text-white rounded px-8 h-8 font-bold">
                         Sign Up
                     </button>
                 </form>
                 {isSubmitSuccessful && <span className="bg-green-100 text-green-800 rounded-md border-green-800 text-sm p-2 my-auto" >Compte créé !</span>}
-                <div className="flex justify-center items-center flex-col w-full bg-white p-4 rounded border border-primary">
+                <div className="flex justify-center items-center flex-col w-full bg-white p-4 rounded border border-secondary">
                     <p className="text-sm">
                         Tu as un compte ?{` `}
-                        <Link to={ROUTES.LOGIN} className="font-bold text-primary">
+                        <Link to={ROUTES.LOGIN} className="font-bold text-secondary">
                             Login
                         </Link>
                     </p>

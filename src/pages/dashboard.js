@@ -102,9 +102,9 @@ export default function Dashboard() {
             <div className="bg-gray-50 mx-auto px-12 lg:text-left text-center lg:w-7/12 w-10/12 mt-16 pt-10 flex flex-col rounded-md">
 
                 <form
-                    className="flex flex-col mx-auto space-y-6 bg-red-100 lg:w-9/12 w-full mb-12 p-4 rounded-md"
+                    className="flex flex-col mx-auto space-y-6 bg-secondary lg:w-9/12 w-full mb-12 p-4 rounded-md"
                     onSubmit={onSubmit}>
-                    <label>Titre du post</label>
+                    <label className="text-white font-bold">Titre du post</label>
                     <input type="text" id="titlePost" onChange={(e) => setTitle(e.target.value)}
                         className="p-2 mx-auto w-11/12 rounded-md" />
 
@@ -120,7 +120,7 @@ export default function Dashboard() {
                     <button
                         type='submit'
 
-                        className='bg-red-300 mt-4 text-white font-bold'
+                        className='bg-blue-300 mt-4 text-white font-bold'
                     > Poster !</button>
                 </form>
 
@@ -128,7 +128,7 @@ export default function Dashboard() {
                     refreshToSee ? (
                         <div className="text-bold"> Actualise pour voir ton post {`;)`} </div>
                     ) : (
-                        <div className="text-bold bg-red-400 text-white p-2">Pas de post encore {`:(`} </div>
+                        <div className="text-bold bg-blue-400 text-white p-2">Pas de post encore {`:(`} </div>
                     )
                 ) : (
                     posts.map((post) => (

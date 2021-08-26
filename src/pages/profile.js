@@ -75,23 +75,23 @@ export default function Profile() {
         <main className="w-full flex">
             <Sidebar></Sidebar>
             <div className="lg:w-8/12 w-10/12 mx-auto p-12 flex flex-col">
-                <p className="text-2xl mb-12">Bonjour {firstname} !</p>
-                <form className="bg-red-100 p-12 flex flex-col space-y-6">
+                <p className="text-2xl mb-12 text-secondary">Bonjour {firstname} !</p>
+                <form className="bg-secondary text-white p-12 flex flex-col space-y-6">
 
                     <p>Prénom:</p>
                     <input
                         aria-label="Ajouter votre prénom"
                         type="text"
-                        className="lg:w-5/12 w-full"
+                        className="lg:w-5/12 w-full text-black"
                         onChange={(e) => setChangeName(e.target.value)} />
                     <p>Nom:</p>
                     <input
                         aria-label="Ajouter votre nom"
                         type="text"
-                        className="lg:w-5/12 w-full"
+                        className="lg:w-5/12 w-full text-black"
                         onChange={(e) => setChangeLastname(e.target.value)} />
                     <button
-                        className="w-min rounded-full lg:self-start self-center bg-red-200 p-2"
+                        className="w-min rounded-full lg:self-start self-center bg-blue-400 p-2 hover:bg-blue-300"
                         onClick={(e) => onSubmit(e)}
                         onKeyDown={(event) => {
                             if (event.key === 'Enter') {
@@ -102,7 +102,7 @@ export default function Profile() {
                     </button>
                 </form>
                 <button
-                    className="lg:w-min rounded-full bg-primary text-white p-4 self-center mt-12 hover:opacity-80"
+                    className="lg:w-min rounded-full bg-secondary text-white p-4 self-center mt-12 hover:opacity-80"
                     onClick={(e) => deleteUser(userToken, user.users.id, e)}
                     onKeyDown={(event) => {
                         if (event.key === 'Enter') {

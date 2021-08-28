@@ -114,7 +114,7 @@ export default function Dashboard() {
                         <input type="file" capture="user" accept="image/^"
                             className="file"
                             id="file" onChange={(e) => handleFile(e)} />
-                        <p className="mt-1 w-full break-words inline-block">{fileName}</p>
+                        <p className="mt-1 w-full break-words inline-block text-white">{fileName}</p>
                     </div>
 
                     <button

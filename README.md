@@ -12,19 +12,28 @@ You need to use Postman "/auth/signup"
 
 In the body paste this :
 {
+
     "firstname": "FIRSTNAME_OF_YOUR_ADMIN",
+
     "lastname": "lASTNAME_OF_YOUR_ADMIN"",
+
     "email": "EMAIL_OF_YOUR_ADMIN"",
+
     "password": "PASSWORD_OF_YOUR_ADMIN"",
+
     "roles":["admin"]
+
 }
-Note that your password must contains uppercase, lowercase, symbole and number
+
+`Note that your password must contains uppercase, lowercase, symbole and number`
 
 ### `npm start`
 
 Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Open [http://localhost:4200](http://localhost:4200) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
 
+
+### A word about the UI
+
+There was no layout for the project and it has to be accessible, so I took the most contrasted colors of the visual identity.

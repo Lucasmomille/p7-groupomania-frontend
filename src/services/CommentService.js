@@ -8,11 +8,8 @@ const create = (token, data) => {
             "Content-type": "application/json",
             'x-access-token': `${token}`
         },
-
-
     }
     ).post("/comments", data);
-    // return http.get("/posts/all")
 };
 
 const deleteComment = (token, id) => {
@@ -22,11 +19,8 @@ const deleteComment = (token, id) => {
             "Content-type": "application/json",
             'x-access-token': `${token}`
         },
-
-
     }
     ).delete(`/comments/${id}`);
-    // return http.get("/posts/all")
 };
 
 export default {

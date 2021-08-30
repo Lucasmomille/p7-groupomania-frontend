@@ -1,9 +1,6 @@
 # Getting Started with Groupomania front-end
 
-You have to run Groupomania backend too.
-
-run npm install and install [TailwindCSS](https://tailwindcss.com/docs/guides/create-react-app) for CRA.
-No need to create tailwind.config.js etc.
+You have to run [Groupomania backend](https://github.com/Lucasmomille/P7-groupomania-backend) too.
 
 
 ## Create an admin profile

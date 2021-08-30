@@ -74,7 +74,7 @@ export default function Profile() {
     return (
         <main className="w-full flex">
             <Sidebar></Sidebar>
-            <div className="lg:w-8/12 w-10/12 mx-auto p-12 flex flex-col">
+            <div className="lg:w-8/12 w-9/12 mx-auto p-12 flex flex-col">
                 <p className="text-2xl mb-12 text-secondary">Bonjour {firstname} !</p>
                 <form className="bg-secondary text-white p-12 flex flex-col space-y-6">
 

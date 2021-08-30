@@ -8,7 +8,6 @@ const isUser = (token) => {
             "Content-type": "multipart/form-data",
             'x-access-token': `${token}`
         }
-
     }
     ).get("/users/user");
 };
@@ -20,10 +19,8 @@ const isAdmin = (token) => {
             "Content-type": "multipart/form-data",
             'x-access-token': `${token}`
         }
-
     }
     ).get("/users/admin");
-    // return http.get("/posts/all")
 };
 
 const updateUser = (token, data) => {
@@ -34,7 +31,6 @@ const updateUser = (token, data) => {
             "Content-type": "application/json",
             'x-access-token': `${token}`
         }
-
     }
     ).put("/users", data);
 };

@@ -1,4 +1,3 @@
-//import http from "../http-common";
 /* eslint-disable */
 import axios from 'axios'
 
@@ -9,10 +8,8 @@ const getAll = (token) => {
             "Content-type": "application/json",
             'x-access-token': `${token}`
         }
-
     }
     ).get("/posts/all");
-    // return http.get("/posts/all")
 };
 
 const create = (token, data) => {
@@ -22,11 +19,8 @@ const create = (token, data) => {
             "Content-type": "multipart/form-data",
             'x-access-token': `${token}`
         },
-
-
     }
     ).post("/posts", data);
-    // return http.get("/posts/all")
 };
 
 const createLike = (token, data) => {
@@ -36,11 +30,8 @@ const createLike = (token, data) => {
             "Content-type": "application/json",
             'x-access-token': `${token}`
         },
-
-
     }
     ).post("/posts/likes", data);
-    // return http.get("/posts/all")
 };
 
 const deleteLike = (token, id, data) => {
@@ -51,7 +42,6 @@ const deleteLike = (token, id, data) => {
         },
         data: { postId: data }
     });
-    // return http.get("/posts/all")
 };
 
 const updateLike = (token, data) => {
@@ -61,11 +51,8 @@ const updateLike = (token, data) => {
             "Content-type": "application/json",
             'x-access-token': `${token}`
         },
-
-
     }
     ).post(`/posts/likes/two`, data);
-    // return http.get("/posts/all")
 };
 
 const deletePost = (token, id) => {
@@ -77,7 +64,6 @@ const deletePost = (token, id) => {
         },
     }
     ).delete(`/posts/${id}`);
-    // return http.get("/posts/all")
 };
 
 export default {
